@@ -4,9 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 @Entity //make a table out of this class
+@Table(name="agents")
 public class Agents {
 
 	@GeneratedValue(strategy=GenerationType.AUTO)
