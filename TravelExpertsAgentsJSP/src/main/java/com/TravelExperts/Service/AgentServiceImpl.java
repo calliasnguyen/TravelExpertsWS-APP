@@ -48,7 +48,7 @@ public class AgentServiceImpl implements AgentService {
 
 	@Override
 	@Transactional
-	public void removePerson(int id) {
+	public void removeAgent(int id) {
 		this.agentDAO.removeAgent(id);
 		
 	}

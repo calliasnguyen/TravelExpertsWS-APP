@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,10 +39,16 @@ public class HomeController {
 //		this.agentService = as;
 //	}
 	
+	@Autowired
+	AgentService agentService;
+	
+	
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
+	
+	// TO ACCESS THE WEBSISTE http://localhost:8080/Agents
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
@@ -57,8 +65,6 @@ public class HomeController {
 		return "home";
 	}
 	
-	@Autowired
-	AgentService agentService;
 	
 	@RequestMapping(value = "/lists", method = RequestMethod.GET)
 	public @ResponseBody
@@ -75,5 +81,40 @@ public class HomeController {
 		return agentList;
 	}
 	
+	//For adding and updating an Agent
+	@RequestMapping(value= "/add", method = RequestMethod.POST)
+	public String addAgent(@ModelAttribute("agent") Agent a)
+	{
+		if(a.getAgentId() == 0)
+		{
+			//Add a new agent
+			agentService.addAgent(a);
+		}
+		else
+		{
+			agentService.updateAgent(a);
+		}
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value= "/remove/{id}")
+	public String removePerson(@PathVariable("id") int id){
+		
+		agentService.removeAgent(id);
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value= "/edit/{id}")
+	public String editAgent(@PathVariable("id") int id, Model model, Locale locale){
+		Date date = new Date();
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		
+		String formattedDate = dateFormat.format(date);
+		
+		model.addAttribute("serverTime", formattedDate );
+		model.addAttribute("agent", agentService.getAgentById(id));
+		model.addAttribute("listAgents", agentService.listAgents());
+		return "home";
+	}
 	
 }

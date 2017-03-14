@@ -13,14 +13,13 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="agents")
-
-
 public class Agent implements Serializable  {
 	
 	
 	@Id
 	@Column(name="agentid") 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	
 	private Integer agentId;
 	
 	@Column(name="agtfirstname")

@@ -10,6 +10,6 @@ public interface AgentService {
 	public void addAgent(Agent a);
 	public void updateAgent(Agent a);
 	public Agent getAgentById(int id);
-	public void removePerson(int id);
+	public void removeAgent(int id);
 
 }
