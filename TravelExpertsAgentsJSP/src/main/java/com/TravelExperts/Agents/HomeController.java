@@ -85,7 +85,7 @@ public class HomeController {
 	@RequestMapping(value= "/add", method = RequestMethod.POST)
 	public String addAgent(@ModelAttribute("agent") Agent a)
 	{
-		if(a.getAgentId() == 0)
+		if(a.getAgentId() == null)
 		{
 			//Add a new agent
 			agentService.addAgent(a);

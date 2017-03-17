@@ -35,12 +35,16 @@
 	</beans:bean>
 	
 		<!-- Hibernate 4 SessionFactory Bean definition -->
+		<!--  MAKE SURE YOU MAP YOUR MODEL CLASSES HERE!!! Callias.NGUYEN -->
 	<beans:bean id="hibernate4AnnotatedSessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource" />
 		<beans:property name="annotatedClasses">
 			<beans:list>
+			<!--  You NEED TO ADD YOUR ENTITY MODELS IN HERE CALLIAS NGUYEN -->
 				<beans:value>com.TravelExperts.Model.Agent</beans:value>
+				<beans:value>com.TravelExperts.Model.Customer</beans:value>
+				<beans:value>com.TravelExperts.Model.Package</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -67,4 +71,25 @@
 		<beans:property name = "agentDAO" ref="agentDAO"></beans:property>
 	</beans:bean>
 	
-</beans:beans>
+	
+	<!--  Customer DAO, and CustomerService -->
+	<beans:bean id="customerDAO" class="com.TravelExperts.DAO.CustomerDAOImpl">
+		<beans:property name = "sessionFactory" ref="hibernate4AnnotatedSessionFactory"></beans:property>
+	</beans:bean>
+	
+	<beans:bean id="customerService" class="com.TravelExperts.Service.CustomerServiceImpl">
+	<!-- property name has to follow the private instance in the customerServiceImpl  & ref is the class-->
+			<beans:property name ="customerDao" ref="customerDAO"></beans:property>
+	</beans:bean>
+	
+	
+	<!--  Package DAO and packageService -->
+	<beans:bean id="packageDAO" class="com.TravelExperts.DAO.PackageDAOImpl">
+		<beans:property name = "sessionFactory" ref="hibernate4AnnotatedSessionFactory"></beans:property>
+	</beans:bean>
+	
+	
+	<beans:bean id="packageService" class="com.TravelExperts.Service.PackageServiceImpl">
+		<beans:property name="packageDao" ref="packageDAO"></beans:property>
+	</beans:bean>
+	</beans:beans>

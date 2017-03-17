@@ -1,6 +1,6 @@
 package com.TravelExperts.Model;
 
-import java.io.Serializable;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="agents")
-public class Agent implements Serializable  {
+public class Agent {
 	
 	
 	@Id
