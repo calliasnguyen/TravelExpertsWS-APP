@@ -45,6 +45,7 @@
 				<beans:value>com.TravelExperts.Model.Agent</beans:value>
 				<beans:value>com.TravelExperts.Model.Customer</beans:value>
 				<beans:value>com.TravelExperts.Model.Package</beans:value>
+				<beans:value>com.TravelExperts.Model.Booking</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -92,4 +93,16 @@
 	<beans:bean id="packageService" class="com.TravelExperts.Service.PackageServiceImpl">
 		<beans:property name="packageDao" ref="packageDAO"></beans:property>
 	</beans:bean>
+	
+	
+	<!-- Booking DAO and bookingService -->
+	<beans:bean id="bookingDAO" class="com.TravelExperts.DAO.BookingDAOImpl">
+		<beans:property name ="sessionFactory" ref="hibernate4AnnotatedSessionFactory"></beans:property>
+	</beans:bean>
+	
+	<beans:bean id="bookingService" class="com.TravelExperts.Service.BookingServiceImpl">
+		<beans:property name="bookingDAO" ref="bookingDAO"></beans:property>
+	</beans:bean>
+	
+	
 	</beans:beans>
