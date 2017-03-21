@@ -42,14 +42,34 @@ public class CustomerController {
 	
 	//GET METHOD to grab a customer by ID
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody Customer getCustomerId(@PathVariable("id") Integer id)
+	public ResponseEntity<Customer> getCustomerId(@PathVariable("id") Integer id)
 	{
-		Customer customer = new Customer();
+		Customer customer = null;
+		try
+		{
+			//If customerservice cannot find a customer by the ID it will throw a bad request
 		customer = customerService.getCustomerById(id);
-		return customer;
+		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+		}
+		catch(Exception e)
+		{
+			//Throwing a bad request 400
+			return new ResponseEntity<Customer>(customer, HttpStatus.BAD_REQUEST);
+		}
+		
+
 	}
 	
 	
+	//Get METHOD to grab a customer by agent's ID
+	@RequestMapping(value = "/agent", method = RequestMethod.GET)
+	public @ResponseBody List<Customer> getCustomerByAId(@RequestParam int agentid)
+	{
+			//if nothing is found return null
+		List<Customer> customersbyAgentID = null;
+		customersbyAgentID = customerService.getCustomerByAgentId(agentid);
+		return customersbyAgentID;
+	}
 
 	
 	//Adding Customer using RequestMethod POST
@@ -72,4 +92,7 @@ public class CustomerController {
 				
 		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
 	}
+	
+	
+	
 }

@@ -10,5 +10,6 @@ public interface CustomerDAO {
 	public void updateCustomer(Customer c);
 	public Customer getCustomerById(int id);
 	public void removeCustomer(int id);
+	public List<Customer> getCustomerByAgentId(int agentID);
 	
 }

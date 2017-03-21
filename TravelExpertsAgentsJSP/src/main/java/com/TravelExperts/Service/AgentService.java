@@ -11,5 +11,7 @@ public interface AgentService {
 	public void updateAgent(Agent a);
 	public Agent getAgentById(int id);
 	public void removeAgent(int id);
+	public boolean isValidAgent(String agtFirstName, String agtLastName);
+	public Agent returnAgentbyName(String firstName, String lastName);
 
 }

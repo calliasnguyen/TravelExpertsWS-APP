@@ -2,7 +2,7 @@ package com.TravelExperts.DAO;
 
 import java.util.List;
 
-
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.LoggerFactory;
@@ -66,6 +66,30 @@ public class CustomerDAOImpl implements CustomerDAO{
 			session.delete(customer);
 		}
 		logger.info("Customer has been deleted from the database, Customer Details: "+ customer);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Customer> getCustomerByAgentId(int agentID) {
+		Session session = this.sessionFactory.getCurrentSession();
+		String selectByAgentId = "Select c from Customer c where c.agentId = :agentid";
+		Query query = session.createQuery(selectByAgentId);
+		query.setInteger("agentid", new Integer(agentID));
+		
+		//initialize as null first
+		List<Customer> agentsCustomers = null;
+		
+		try
+		{
+	
+			agentsCustomers = (List<Customer>) query.list();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		return agentsCustomers;
 	}
 
 }

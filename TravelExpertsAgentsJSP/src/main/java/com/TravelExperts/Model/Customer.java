@@ -9,10 +9,13 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Proxy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Entity
 @Table(name = "customers")
-
+@Component //also used for sessions
+@Scope("session") // used for sessions
 //NEED TO USE JSONIGNOREPROPERTIES, and PROXY to initialize JSON format for retrieving Customer's by ID
 @JsonIgnoreProperties(ignoreUnknown = false)
 @Proxy(lazy = false)
@@ -41,9 +44,13 @@ public class Customer {
 	@Column(name = "custpostal")
 	private String customerPostal;
 	
+	
+	//allowed to be null
 	@Column(name = "custcountry")
 	private String customerCountry;
 	
+	
+	//allowed to be null
 	@Column(name="custhomephone")
 	private String customerHomePhone;
 	
@@ -53,6 +60,8 @@ public class Customer {
 	@Column(name="custemail")
 	private String customerEmail;
 	
+	
+	//allowed to be null
 	@Column(name="agentid")
 	private Integer agentId;
 	

@@ -48,4 +48,13 @@ public class CustomerServiceImpl implements CustomerService {
 		this.customerDao.removeCustomer(id);
 	}
 
+	@Transactional
+	@Override
+	public List<Customer> getCustomerByAgentId(int agentID) {
+			// TODO Auto-generated method stub
+		return this.customerDao.getCustomerByAgentId(agentID);
+	}
+	
+	
+
 }

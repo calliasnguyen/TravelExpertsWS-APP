@@ -2,11 +2,15 @@ package com.TravelExperts.DAO;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.LoggerFactory;
 
+
 import com.TravelExperts.Model.Agent;
+
+
 
 public class AgentDAOImpl implements AgentDAO {
 
@@ -66,4 +70,63 @@ public class AgentDAOImpl implements AgentDAO {
 		
 		
 	}
+
+	@Override
+	public boolean isValidAgent(String agtFirstName, String agtLastName) {
+		
+		try{
+		Session session = this.sessionFactory.getCurrentSession();
+		String loginValidationStatement = "Select a from Agent a where a.agtFirstName = :firstname and a.agtLastName = :lastname ";
+		Query query = session.createQuery(loginValidationStatement);
+		query.setString("firstname", agtFirstName);
+		query.setString("lastname", agtLastName);
+		
+		//if the query returns a match, the list size will be greater than 0
+		Integer loginConfirmation = query.list().size();
+		
+		System.out.println(loginConfirmation);
+		
+		//Test to see if this will return anything
+		if(loginConfirmation>0)
+		{
+			return true;
+		}
+		else
+			return false;
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+
+	@Override
+	public Agent returnAgentbyName(String firstName, String lastName) {
+		
+		Agent agent = new Agent();
+		try{
+			Session session = this.sessionFactory.getCurrentSession();
+			String loginValidationStatement = "Select a from Agent a where a.agtFirstName = :firstname and a.agtLastName = :lastname ";
+			Query query = session.createQuery(loginValidationStatement);
+			query.setString("firstname", firstName);
+			query.setString("lastname",  lastName);
+			
+			
+			//This will return us one agent in a list
+			//should probably find agent using custom session.createCriteria
+			List<Agent> agentList = query.list();
+			System.out.println(agentList);
+			
+			//Extract the agent out of the list
+			agent = (Agent) query.list().get(0);
+			
+			return agent;
+			}
+			catch(Exception e)
+			{
+				System.out.println(e.getMessage());
+			}
+			return agent;
+	}	
 }
