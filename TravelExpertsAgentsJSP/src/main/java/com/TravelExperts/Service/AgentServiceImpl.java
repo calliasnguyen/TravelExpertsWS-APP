@@ -69,4 +69,12 @@ public class AgentServiceImpl implements AgentService {
 		return this.agentDAO.returnAgentbyName(firstName, lastName);
 	}
 
+
+	@Override
+	@Transactional
+	public boolean isValidAgentAuthorization(String agtAuthorization) {
+	
+		return this.agentDAO.isValidAgentAuthorization(agtAuthorization);
+	}
+
 }

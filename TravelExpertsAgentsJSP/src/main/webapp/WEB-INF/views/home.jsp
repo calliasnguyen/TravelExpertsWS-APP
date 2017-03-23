@@ -31,15 +31,16 @@
 
 
 <!-- session variable Agent --><!-- CANNOT RESTORE A SESSION OBJECT AGAIN ONCE SERIALZABLE YOU NEED TO FIGURE ANOTHER WAY -->
+	<!-- 
 	<c:set var="testing" scope="session" value="${agentLogin}"/>
 	<c:set var="agentLogin" scope="session" value="${agentLogin}"/>
-	
+	 -->
 	
 <!-- Trying to map the home and index pages here -->
 <c:url var="homeURL" value="./home">
 </c:url>
 
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
 	      <a class="navbar-brand" href="#">Travel Experts</a>
@@ -51,7 +52,7 @@
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="customer"><span class="glyphicon glyphicon-user"></span>Sign Up Customer</a></li>
-	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	      <li><a href="login"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	    </ul>
 	  </div>
 	</nav>
@@ -67,9 +68,10 @@
 
 					<!-- TESTING SERIALIZABLE AND TESTING SESSION VARIABLES HERE -->
 <!-- Testing session variables and parameters -->
+<!-- 
 <p>hello ${agentLogin.agtFirstName}</p>
 <p>moving session testing ${testing.agtFirstName }</p>
-
+ -->
 
 
 

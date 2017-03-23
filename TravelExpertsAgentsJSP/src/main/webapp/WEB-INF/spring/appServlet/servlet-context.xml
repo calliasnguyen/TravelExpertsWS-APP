@@ -30,8 +30,10 @@
 	<context:component-scan base-package="com.TravelExperts.Agents" />
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
+	
+	<!--  Change your travel experts information here -->
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
 		<beans:property name="url" value="jdbc:mysql://localhost:3306/travelexperts" />
 		<beans:property name="username" value="root" />
 		<beans:property name="password" value="" />
@@ -67,6 +69,14 @@
 		<beans:bean id="customer" class="com.TravelExperts.Model.Customer" scope="session">
 			 <aop:scoped-proxy/>	
 		</beans:bean>
+		<beans:bean id="booking" class="com.TravelExperts.Model.Booking" scope="session">
+			 <aop:scoped-proxy/>	
+		</beans:bean>
+	<beans:bean id="package" class="com.TravelExperts.Model.Package" scope="session">
+			 <aop:scoped-proxy/>	
+		</beans:bean>
+	
+	
 	
 	<beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />

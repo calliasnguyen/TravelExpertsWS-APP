@@ -3,6 +3,7 @@ package com.TravelExperts.Agents;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import com.TravelExperts.Service.CustomerService;
 
 @RequestMapping(value = "/Customer")
 @Controller
+@Scope("session") // to control sessions
 public class CustomerController {
 
 	@Autowired

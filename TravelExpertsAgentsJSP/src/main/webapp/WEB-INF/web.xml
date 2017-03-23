@@ -25,9 +25,15 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 		
+		
+		<!--  URL Mapping of the servlet -->
+		<!--  original one is "/" for the home controller... so Agents/ -->
+		<!--  Need to put the /ajax controller here so that we can test views of ajax Callias Nguyen -->
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
+		<url-pattern>/ajax</url-pattern>
+		<url-pattern>/ajax/</url-pattern>
 	</servlet-mapping>
 	
 	<!--  Session timeout -->

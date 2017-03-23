@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,10 +27,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.TravelExperts.Model.Package;
 import com.TravelExperts.Model.Agent;
+import com.TravelExperts.Model.Booking;
 import com.TravelExperts.Model.Customer;
 import com.TravelExperts.Service.AgentService;
+import com.TravelExperts.Service.BookingService;
 import com.TravelExperts.Service.CustomerService;
+import com.TravelExperts.Service.PackageService;
 
 
 @Controller
@@ -44,8 +49,14 @@ public class HomeController {
 	@Autowired 
 	CustomerService customerService;
 	
+	@Autowired
+	BookingService bookingService;
+	
+	@Autowired
+	PackageService packageService;
 
-
+	
+	///////////////////////////////////////////////Initial Login Page ///////////////////////////////////////////////////////////////////////////////
 	
 	//Initial LOGIN PAGE.. need to POST to the Index Page
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -54,12 +65,14 @@ public class HomeController {
 			
 		//need a model attribute in order to complete the form
 		model.addAttribute("agent", new Agent());
+		
+		// initialize error here but make it null so it doesnt show up on the screen
 		model.addAttribute("error");
 		return "Login";
 	}
 	
 	
-	
+//////////////////////////////////////////////////////	index page /////////////////////////////////////////////////////////////////////////////////////
 	//Index Page for after logging in as an agent for posting purposes only
 	@RequestMapping(value = "/index", method = RequestMethod.POST)
 	//changed model to modelMap
@@ -98,25 +111,43 @@ public class HomeController {
 	}
 	
 	
-	//Get method for the INDEX PAGE (Cannot post back to original location) called home instead of /index
+	/////////////////////////////////////////Get method for the INDEX PAGE (Cannot post back to original location) called home instead of /index///////////////////////////
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	//changed model to modelMap
 	public String home(Locale locale, ModelMap model, @ModelAttribute("agent") Agent a) {
 		logger.info("Welcome to the index page! The client locale is {}.", locale);
 		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+	
 		
-		String formattedDate = dateFormat.format(date);
 		
-		model.addAttribute("serverTime", formattedDate);
 		model.addAttribute("agent",a);
 		
 			return "index";
 		}
 	
-
 	
+	//////////////////////////////////////////////////AJAX CODE to update time on the index page///////////////////////////////////////////////////////////////////////////
+	@RequestMapping(value = "/ajaxTime", method = RequestMethod.GET)
+	public @ResponseBody String getTime(Locale locale)
+	{
+		
+		//line to test if ajax goes to this controller
+		System.out.println("successfully connecting to the ajax timer");
+		
+		Date date = new Date();
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		String formattedDate = dateFormat.format(date);
+		
+		return formattedDate;
+		
+		
+	}
+	
+	
+	
+	
+
+	/////////////////////////////////////////////////////////////////Updating adding and deleting agents website/////////////////////////////////////////////////////////////
 	
 	//THIS IS THE UPDATING/ADDING/EDITING AGENTS WEBSITE
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -136,23 +167,78 @@ public class HomeController {
 		return "home";
 	}
 	
+	
+	
+	////////////////////////////////////////////////////////////////Bookings and customer's by specific agent/////////////////////////////////////////////////////////////
+	
 	//Testing the Bookings Site 
 	@RequestMapping(value = "/bookings", method = RequestMethod.GET)
 	public String customerAdd(Locale locale, Model model, HttpSession session) {
 		logger.info("Welcome to the booking database! The client locale is {}.", locale);	
 		
+	
 		Agent agent =  (Agent) session.getAttribute("agentlogin");
+	
+		
+		System.out.println("This agent is:" + agent);
+		if(agent == null)
+		{
+			model.addAttribute("agent", new Agent());
+			return "Login";
+		}
+		
+		
+		
 		
 		List<Customer> customersByAgent = null;
 		customersByAgent = customerService.getCustomerByAgentId(agent.getAgentId());
 		
+		for(Customer customer: customersByAgent)
+		{
+			Integer customerId = customer.getCustomerId();
+			List<Booking> bookingsByCustomer = null;
+			try
+			{
+			bookingsByCustomer = bookingService.getBookingsByCustomerId(customerId);
+		
+			
+			//set the customer with the booking + package
+			customer.setBookings(bookingsByCustomer);
+			
+			// TEST THIS OUT LATER for each of the booking, add the assigned package value here
+//			for(Booking booking:bookingsByCustomer)
+//			{
+//				Package bookingPackage = new Package();
+//				bookingPackage =  (Package) packageService.getPackageById(booking.getPackageId());
+//				
+//				//see what it prints here
+//				System.out.println(bookingPackage);
+//			
+//				booking.setPackage(bookingPackage);		
+//				
+//				//see if it prints out a package
+//				System.out.println(booking.getPackage());
+//			}
+			
+			}
+			catch(Exception e)
+			{
+				System.out.println(e.getMessage());
+			}
+			
+		}
+		
 		model.addAttribute("listCustomer", customersByAgent);
 		return "bookings";
 	}
+/////////////////////////////////////////// END OF BOOKING SITE ////////////////////////////////	
+	
+	
+	/////////////////////////////////////////////////////GET Request to grab an agent by first name and last name/////////////////////////////////////////////////////////	
 	
 	
 					//Can delete this when finished
-					//Testing to see if retrieving agent by name works correctly
+//Testing to see if retrieving agent by name works correctly
 					@RequestMapping(value = "/validagent", method= RequestMethod.GET)
 					public @ResponseBody Agent getAgentByName(@RequestParam String fname, @RequestParam String lname)
 					{
@@ -166,7 +252,7 @@ public class HomeController {
 						
 					}
 					
-					
+			/////////////////////////////////////////////////////GET Request to grab a list of agents/////////////////////////////////////////////////////////		
 	
 	//Grabbing a list of all agents...
 	@RequestMapping(value = "/lists", method = RequestMethod.GET)
@@ -184,6 +270,9 @@ public class HomeController {
 		return agentList;
 	}
 	
+	
+	///////////////////////////////////////////////////////////////////////Add of update an agent///////////////////////////////////////////////////////////////////
+	
 	//For adding and updating an Agent
 	@RequestMapping(value= "/add", method = RequestMethod.POST)
 	public String addAgent(@ModelAttribute("agent") Agent a)
@@ -191,6 +280,11 @@ public class HomeController {
 		if(a.getAgentId() == null)
 		{
 			//Add a new agent
+			
+			//create a randomized UUID for authorization for this agent
+			String uuid = UUID.randomUUID().toString();
+			a.setAgentAuthorization(uuid);
+			
 			agentService.addAgent(a);
 		}
 		else
@@ -200,7 +294,7 @@ public class HomeController {
 		return "redirect:/";
 	}
 	
-	
+	////////////////////////////////////////////////////////////////////get request to add the customer//////////////////////////////////////////////////////////////
 	//For adding a new Customer
 	@RequestMapping(value= "/addCustomer", method = RequestMethod.POST)
 	public String addAgent(@ModelAttribute("customer") Customer c)
@@ -209,7 +303,7 @@ public class HomeController {
 		return "redirect:/customer";
 	}
 	
-	//Customer WEBSITE access (need the new customer to add a customer to the form)
+	//////////////////////////////////////////////////////////Customer WEBSITE access (need the new customer to add a customer to the form)///////////////////////////////
 	@RequestMapping(value = "/customer", method = RequestMethod.GET)
 	public String customerAdd(Locale locale, Model model, HttpSession session,  @ModelAttribute("customer") Customer c) {
 		logger.info("Welcome to customer database! The client locale is {}.", locale);	
@@ -239,5 +333,20 @@ public class HomeController {
 		model.addAttribute("listAgents", agentService.listAgents());
 		return "home";
 	}
+	
+	
+	/////////////////////////////////////////////Testing to see if Authorization works//////////////////////////////
+	//Test controller to see if the agent authorization works
+		@RequestMapping(value="/authorization", method=RequestMethod.GET)
+		public @ResponseBody String authorizationCheck(@RequestParam String authorization)
+		{
+			if(agentService.isValidAgentAuthorization(authorization))
+			{
+				return "this has been successful";
+			}
+			else
+			return "No such agent with this authorization";
+		}
+	
 	
 }

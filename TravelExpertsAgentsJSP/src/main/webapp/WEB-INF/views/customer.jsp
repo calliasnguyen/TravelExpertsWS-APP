@@ -25,19 +25,19 @@
 <title>Add a Customer</title>
 </head>
 <body>
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
 	      <a class="navbar-brand" href="#">Travel Experts</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li><a href="<c:url value="${homeURL}"/>">Home</a></li>
-	      <li class="active"> <a href="./">Add/Edit Agent</a></li>
+	      <li><a href="<c:url value="home"/>">Home</a></li>
+	      <li> <a href="./">Add/Edit Agent</a></li>
 	      <li><a href="bookings">Bookings</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
-	      <li><a href="#"><span class="glyphicon glyphicon-user"></span>Sign Up Customer</a></li>
-	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	      <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span>Sign Up Customer</a></li>
+	      <li><a href="login"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	    </ul>
 	  </div>
 	</nav>
@@ -47,9 +47,12 @@
 
 
 <!-- TESTING UP SESSIONS HERE -->
+<!-- 
  <p>session testing ${testing.agtFirstName} ... session agentLogin ${agentLogin.agtFirstName }</p>
 <p> session testing controller's agentlogin ${agentlogin.getAgentId()} </p>
-<p> session testing controller's helloworld ${helloworld} </p>
+ -->
+ 
+ 
 <!-- Beginning of the form -->
 <div class = "container">
 <c:url var="addAction" value="/addCustomer" ></c:url>

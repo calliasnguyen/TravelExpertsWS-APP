@@ -58,6 +58,18 @@ public class Agent implements Serializable {
 	@Column(name="agencyid")
 	private Integer agencyid;
 	
+	//Added this to the database on myphpadmin
+	@Column(name="agtauthorization")
+	private String agtAuthorization;
+	
+	public String getAgentAuthorization() {
+		return agtAuthorization;
+	}
+
+	public void setAgentAuthorization(String agtAuthorization) {
+		this.agtAuthorization = agtAuthorization;
+	}
+	
 	
 
 	public Integer getAgentId() {

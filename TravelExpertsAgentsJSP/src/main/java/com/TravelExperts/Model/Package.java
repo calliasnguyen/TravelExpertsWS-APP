@@ -2,6 +2,7 @@ package com.TravelExperts.Model;
 
 
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -16,16 +17,29 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Proxy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
 
 
 @Entity
 @Table(name = "packages")
-//@IdClass(Package.class)
+
 
 //NEED TO USE JSONIGNOREPROPERTIES, and PROXY to initialize JSON format for retrieving Customer's by ID
 @JsonIgnoreProperties(ignoreUnknown = false)
 @Proxy(lazy = false)
-public class Package {
+
+
+//trying component and scope to see if this will allow sessions to pass
+@Component
+@Scope(proxyMode=ScopedProxyMode.TARGET_CLASS, value="session")
+public class Package implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Package () {}
 	

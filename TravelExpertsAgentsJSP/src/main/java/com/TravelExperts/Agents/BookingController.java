@@ -3,6 +3,7 @@ package com.TravelExperts.Agents;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import com.TravelExperts.Service.PackageService;
 
 @RequestMapping(value = "/Booking")
 @Controller
+@Scope("session") // to control sessions
 public class BookingController {
 
 	@Autowired

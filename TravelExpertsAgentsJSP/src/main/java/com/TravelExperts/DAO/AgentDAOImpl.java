@@ -72,6 +72,37 @@ public class AgentDAOImpl implements AgentDAO {
 	}
 
 	@Override
+	public boolean isValidAgentAuthorization(String agtAuthorization) {
+		try
+		{
+		Session session = this.sessionFactory.getCurrentSession();
+		String agentAuthorizationStatement = "Select a from Agent a where a.agtAuthorization = :authorization";
+		Query query = session.createQuery(agentAuthorizationStatement);
+		query.setString("authorization",agtAuthorization);
+		
+		//if an agent matches the authorization key supplied, then query.list.size will come back larger than 0
+		//if no agent matches that authorization then kick the user out
+		Integer agtAuthorizationConfirmation = query.list().size();
+		
+		//if the agent matches return true, otherwise return false
+		if(agtAuthorizationConfirmation > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return false;
+}	
+	
+	
+	@Override
 	public boolean isValidAgent(String agtFirstName, String agtLastName) {
 		
 		try{
@@ -128,5 +159,7 @@ public class AgentDAOImpl implements AgentDAO {
 				System.out.println(e.getMessage());
 			}
 			return agent;
-	}	
+	}
+
+
 }

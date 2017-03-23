@@ -13,5 +13,6 @@ public interface AgentService {
 	public void removeAgent(int id);
 	public boolean isValidAgent(String agtFirstName, String agtLastName);
 	public Agent returnAgentbyName(String firstName, String lastName);
+	public boolean isValidAgentAuthorization(String agtAuthorization);
 
 }

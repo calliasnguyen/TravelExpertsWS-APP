@@ -1,6 +1,7 @@
 package com.TravelExperts.Model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -12,19 +13,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import javax.persistence.ManyToOne;
-
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
 
 
 @Entity
 @Table(name="bookings")
+
+@Component
+@Scope(proxyMode=ScopedProxyMode.TARGET_CLASS, value="session")
 public class Booking implements Serializable{
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	public Booking() {}
@@ -55,6 +61,14 @@ public class Booking implements Serializable{
 	@Column(name = "packageid")
 	 private Integer packageid;
 	
+	@Transient //this is to ignore any instance variables not in the database
+	private String formattedDate;
+	
+	public String getformattedDate()
+	{
+		formattedDate = new SimpleDateFormat("dd-MMM-yyy").format(bookingDate);
+		return formattedDate;
+	}
 	
 	//This gets rid of the table constraint for entities (so that you can use Package p)
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -63,6 +77,7 @@ public class Booking implements Serializable{
 	
 	public Package getPackage()
 	{
+		
 		return p;
 	}
 	
@@ -82,6 +97,7 @@ public class Booking implements Serializable{
 	}
 
 	public Date getBookingDate() {
+		
 		return bookingDate;
 	}
 

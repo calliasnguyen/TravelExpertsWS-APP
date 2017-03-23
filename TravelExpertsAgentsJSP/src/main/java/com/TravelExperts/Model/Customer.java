@@ -1,10 +1,15 @@
 package com.TravelExperts.Model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -64,6 +69,25 @@ public class Customer {
 	//allowed to be null
 	@Column(name="agentid")
 	private Integer agentId;
+	
+	
+	
+	
+	//This gets rid of the table constraint for entities (so that you can have a list of bookings for a customer)
+	@OneToMany(cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn(name="customerid", referencedColumnName="customerid")
+	private List<Booking> bookings;
+	
+	public List<Booking> getBooking()
+	{
+		return bookings;
+	}
+	
+	public void setBookings(List<Booking> bookings)
+	{
+		this.bookings = bookings;
+	}
+	
 	
 	
 	public Integer getCustomerId() {

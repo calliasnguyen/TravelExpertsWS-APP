@@ -19,12 +19,22 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+
+<style>
+
+div.jumbotron {
+background-color: #286090;
+color: white;
+text-align: center;
+}
+
+</style>
 </head>
 <body>
 
 <!-- Header For the Agent Database -->
 <div class="jumbotron">
-  <h1>Welcome To the Agent Database</h1>      
+  <h1 style="text-align:center">Welcome To the Agent Database</h1>      
   <p> Please enter your credentials!</p>
 </div>
 

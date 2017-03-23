@@ -12,4 +12,5 @@ public interface AgentDAO {
 	public Agent getAgentById(int id);
 	public void removeAgent(int id);
 	public Agent returnAgentbyName(String firstName, String lastName);
+	public boolean isValidAgentAuthorization(String agtAuthorization);
 }
