@@ -8,6 +8,8 @@ public interface BookingService {
 
 	public List<Booking> getAllBookings();
 	public List<Booking> getBookingsByCustomerId(int id);
-	
+	public void addBooking(Booking b);
+	public void updateBooking(Booking b);
+	public void removeBooking(int id);
 	
 }

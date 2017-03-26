@@ -37,7 +37,7 @@ public class BookingDAOImpl implements BookingDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Booking> getBookingsByCustomerId(int id) {
-		String selectByCustomerId = "Select b from Booking b where b.customerid= ?";
+		String selectByCustomerId = "Select b from Booking b where b.bookingCustomerId= ?";
 		Session session = this.sessionFactory.getCurrentSession();	
 		Query query = session.createQuery(selectByCustomerId);
 		query.setParameter(0, new Integer(id));
@@ -45,6 +45,33 @@ public class BookingDAOImpl implements BookingDAO {
 		
 		logger.info("Booking by customer has been loaded!");
 		return bookingByCustomer;
+	}
+
+	@Override
+	public void addBooking(Booking b) {
+		Session session = this.sessionFactory.getCurrentSession();
+		session.persist(b);
+		logger.info("Booking has been saved succesfully in the database, Booking Details= " + b);
+		
+	}
+
+	@Override
+	public void updateBooking(Booking b) {
+		Session session = this.sessionFactory.getCurrentSession();
+		session.update(b);
+		logger.info("Booking has been sucessfully updated in the database, Booking Details= " + b);
+		
+	}
+
+	@Override
+	public void removeBooking(int id) {
+		Session session = this.sessionFactory.getCurrentSession();
+		Booking b = (Booking) session.load(Booking.class, new Integer(id));
+		if(null != b){
+			session.delete(b);	
+		}
+		logger.info("Booking has been deleted succesfully in the database, Booking Details=" + b);
+		
 	}
 
 	

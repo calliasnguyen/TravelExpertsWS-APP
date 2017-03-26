@@ -11,5 +11,6 @@ public interface CustomerDAO {
 	public Customer getCustomerById(int id);
 	public void removeCustomer(int id);
 	public List<Customer> getCustomerByAgentId(int agentID);
+	public Customer customerLogin(String email, String lastname);
 	
 }

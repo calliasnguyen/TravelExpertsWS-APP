@@ -34,10 +34,14 @@
 		<url-pattern>/</url-pattern>
 		<url-pattern>/ajax</url-pattern>
 		<url-pattern>/ajax/</url-pattern>
+		<url-pattern>/Booking/</url-pattern>
 	</servlet-mapping>
 	
 	<!--  Session timeout -->
 		<session-config>
       <session-timeout>600</session-timeout> 
    </session-config>
+   
+   
+
 </web-app>

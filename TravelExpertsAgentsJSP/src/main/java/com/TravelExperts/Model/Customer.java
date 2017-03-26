@@ -5,13 +5,17 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Proxy;
 import org.springframework.context.annotation.Scope;
@@ -74,8 +78,10 @@ public class Customer {
 	
 	
 	//This gets rid of the table constraint for entities (so that you can have a list of bookings for a customer)
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name="customerid", referencedColumnName="customerid")
+	@JsonIgnore //here for if a customer does not have bookings... ignore this for json format
+	@Transient // dont look for this in the database
 	private List<Booking> bookings;
 	
 	public List<Booking> getBooking()

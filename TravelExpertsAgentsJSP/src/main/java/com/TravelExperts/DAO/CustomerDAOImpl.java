@@ -92,4 +92,38 @@ public class CustomerDAOImpl implements CustomerDAO{
 		return agentsCustomers;
 	}
 
+	@Override
+	public Customer customerLogin(String email, String lastname) {
+		
+		Customer customer = null;
+		
+		try
+		{
+			Session session = this.sessionFactory.getCurrentSession();
+			String customerLoginValidation = "Select c from Customer c where c.customerEmail = :customerEmail AND c.customerLastName = :customerLastName";
+			Query query = session.createQuery(customerLoginValidation);
+			query.setString("customerEmail", email);
+			query.setString("customerLastName", lastname);
+			
+			//confirm that customer size > 0
+			Integer loginConfirmation = query.list().size();
+			
+			if(loginConfirmation > 0)
+			{
+			
+			//will return one list of agent.. so we will grab the 0th value
+			customer = (Customer) query.list().get(0);
+			
+			}
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			
+		}
+		
+		return customer;
+	}
+
 }

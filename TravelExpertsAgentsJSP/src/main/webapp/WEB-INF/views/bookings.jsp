@@ -100,11 +100,12 @@ background-color: #26A69A;
 	</div>
 	</div>
 	<!--  End of table for customer -->
+	
+
+<!-- Must confirm if there are any bookings for this customer -->
+<c:if test="${!empty customer.booking}">
 
 	<!-- Heading for the bookings per customer.. not using this anymore -->	
-<!-- <h4 style="text-align:center" style="font-weight:bold" >${customer.customerFirstName} ${customer.customerLastName} Bookings </h4>
--->
-
 <!-- Testing Collapsable -->
 <div class="container">
   
@@ -155,11 +156,12 @@ background-color: #26A69A;
   </div>
 </div>
 <!--  End of Collapsable -->
-	
-	
-	</c:forEach>
 	</c:if>
 
+
+	</c:forEach> 	<!-- ForEach Customer end tag -->
+	</c:if>	<!--  if customer is not empty end tag -->
+	
 
 
 </body>

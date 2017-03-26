@@ -2,6 +2,7 @@ package com.TravelExperts.Agents;
 
 import java.util.List;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.TravelExperts.Model.Agent;
 import com.TravelExperts.Model.Customer;
 import com.TravelExperts.Service.CustomerService;
+import com.mysql.cj.fabric.Response;
 
 
 @RequestMapping(value = "/Customer")
@@ -60,6 +62,22 @@ public class CustomerController {
 		}
 		
 
+	}
+
+	///////////////////////////////////////////Login Validation for customer/////////////////////////
+	@RequestMapping(value = "/verification", method = RequestMethod.GET)
+	public ResponseEntity<Customer> loginCustomerVerification(@RequestParam String lastname, String email)
+	{
+		Customer customer = customerService.customerLogin(email, lastname);
+		
+		if(customer != null)
+		{
+			return new ResponseEntity<Customer>(customer, HttpStatus.OK);	
+		}
+		else
+			return new ResponseEntity<Customer>(customer, HttpStatus.BAD_REQUEST);
+	
+		
 	}
 	
 	

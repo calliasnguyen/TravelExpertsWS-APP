@@ -29,6 +29,27 @@ public class BookingServiceImpl implements BookingService {
 		return bookingDAO.getBookingsByCustomerId(id);
 	}
 
+	@Transactional
+	@Override
+	public void addBooking(Booking b) {
+		bookingDAO.addBooking(b);
+		
+	}
+
+	@Transactional
+	@Override
+	public void updateBooking(Booking b) {
+		bookingDAO.updateBooking(b);
+		
+	}
+
+	@Transactional
+	@Override
+	public void removeBooking(int id) {
+		bookingDAO.removeBooking(id);
+		
+	}
+
 	
 	
 	

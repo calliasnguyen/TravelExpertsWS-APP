@@ -1,11 +1,16 @@
 package com.TravelExperts.Agents;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,10 +40,15 @@ public class BookingController {
 				for(Booking booking: bookings)
 				{
 					Integer packageID = booking.getPackageId();
-					com.TravelExperts.Model.Package p = packageService.getPackageById(packageID);
-					booking.setPackage(p);
+					System.out.println(packageID);
+					if(packageID != null)
+					{
+						com.TravelExperts.Model.Package p = packageService.getPackageById(packageID);
+						Hibernate.initialize(p);
+						booking.setPackage(p);
+						
+					}
 				}
-				
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -55,8 +65,11 @@ public class BookingController {
 				for(Booking booking: bookingsByCustomer)
 				{
 					Integer packageID = booking.getPackageId();
-					com.TravelExperts.Model.Package p = packageService.getPackageById(packageID);
-					booking.setPackage(p);
+					if (packageID != null)
+					{
+						com.TravelExperts.Model.Package p = packageService.getPackageById(packageID);
+						booking.setPackage(p);
+					}
 				}
 				
 			}catch(Exception e){
@@ -64,5 +77,19 @@ public class BookingController {
 			}
 			return bookingsByCustomer;
 		}
+		
+		
+		
+		/////////////////////////////Update a Booking Post request///////////////////////////////////////////////
+		@RequestMapping(value="/update", method=RequestMethod.POST)
+		public ResponseEntity<Booking> updateBooking(@RequestBody Booking b)
+		{
+			
+			bookingService.updateBooking(b);
+			
+			return new ResponseEntity<Booking>(b, HttpStatus.ACCEPTED);
+			
+		}
+		
 	
 }

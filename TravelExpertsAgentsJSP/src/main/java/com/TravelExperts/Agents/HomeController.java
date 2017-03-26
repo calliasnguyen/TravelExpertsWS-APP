@@ -3,15 +3,18 @@
 
 package com.TravelExperts.Agents;
 
+
 import java.text.DateFormat;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.TravelExperts.Model.Package;
+
 import com.TravelExperts.Model.Agent;
 import com.TravelExperts.Model.Booking;
 import com.TravelExperts.Model.Customer;
@@ -60,9 +63,12 @@ public class HomeController {
 	
 	//Initial LOGIN PAGE.. need to POST to the Index Page
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(Locale locale, String error, ModelMap model) {
+	public String login(Locale locale, String error, ModelMap model, HttpSession session) {
 		logger.info("Welcome to the login page! The client locale is {}.", locale);
 			
+		//When user logs out we will set a new session 
+		session.setAttribute("agentlogin", null);
+		
 		//need a model attribute in order to complete the form
 		model.addAttribute("agent", new Agent());
 		
@@ -114,10 +120,17 @@ public class HomeController {
 	/////////////////////////////////////////Get method for the INDEX PAGE (Cannot post back to original location) called home instead of /index///////////////////////////
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	//changed model to modelMap
-	public String home(Locale locale, ModelMap model, @ModelAttribute("agent") Agent a) {
+	public String home(Locale locale, ModelMap model, @ModelAttribute("agent") Agent a, HttpSession session) {
 		logger.info("Welcome to the index page! The client locale is {}.", locale);
 		
-	
+		Agent agent = (Agent) session.getAttribute("agentlogin");
+		
+		if(agent == null)
+		{
+			//need to add attribute of new agent in the login page...
+			model.addAttribute("agent", new Agent());
+			return "Login"; //returns to login.jsp
+		}
 		
 		
 		model.addAttribute("agent",a);
@@ -148,11 +161,22 @@ public class HomeController {
 	
 
 	/////////////////////////////////////////////////////////////////Updating adding and deleting agents website/////////////////////////////////////////////////////////////
+	//this is the initial folder... need to redirect to login right away
+	
 	
 	//THIS IS THE UPDATING/ADDING/EDITING AGENTS WEBSITE
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(Locale locale, Model model, HttpSession session) {
 		logger.info("Welcome home! The client locale is {}.", locale);
+		
+		Agent agent = (Agent) session.getAttribute("agentlogin");
+		
+		if(agent == null)
+		{
+			//need to add attribute of new agent in the login page...
+			model.addAttribute("agent", new Agent());
+			return "Login"; //returns to login.jsp
+		}
 		
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
@@ -178,9 +202,9 @@ public class HomeController {
 		
 	
 		Agent agent =  (Agent) session.getAttribute("agentlogin");
-	
+
 		
-		System.out.println("This agent is:" + agent);
+		
 		if(agent == null)
 		{
 			model.addAttribute("agent", new Agent());
@@ -199,26 +223,34 @@ public class HomeController {
 			List<Booking> bookingsByCustomer = null;
 			try
 			{
+			
+			//keeps the session open for hibernate so that i am allowed to lazy load the bookings
+			Hibernate.initialize(bookingsByCustomer);	
+				
+			//grabbing the bookings for each customers 
 			bookingsByCustomer = bookingService.getBookingsByCustomerId(customerId);
-		
 			
-			//set the customer with the booking + package
-			customer.setBookings(bookingsByCustomer);
 			
-			// TEST THIS OUT LATER for each of the booking, add the assigned package value here
-//			for(Booking booking:bookingsByCustomer)
-//			{
-//				Package bookingPackage = new Package();
-//				bookingPackage =  (Package) packageService.getPackageById(booking.getPackageId());
-//				
-//				//see what it prints here
-//				System.out.println(bookingPackage);
-//			
-//				booking.setPackage(bookingPackage);		
-//				
-//				//see if it prints out a package
-//				System.out.println(booking.getPackage());
-//			}
+				
+			if(bookingsByCustomer.isEmpty())
+				{
+					System.out.println("The bookings for this customer is 0");
+					System.out.println(bookingsByCustomer);
+					
+					//Need to set something for bookings for this customer
+					//as it throws the lazy loaded exception if not.. 
+					//meaning that you have to initialize a customer's bookings regardless of if they have a booking or not
+					customer.setBookings(bookingsByCustomer);
+					
+				}
+				else
+				{
+				//set the customer with the booking + package
+				customer.setBookings(bookingsByCustomer);
+				System.out.println(bookingsByCustomer);
+				}
+				
+			
 			
 			}
 			catch(Exception e)

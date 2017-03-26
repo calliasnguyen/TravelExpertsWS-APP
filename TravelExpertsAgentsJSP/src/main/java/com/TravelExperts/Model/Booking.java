@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +20,9 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.hibernate.annotations.Proxy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -52,14 +56,14 @@ public class Booking implements Serializable{
 	
 	
 	@Column(name = "customerid")
-	private Integer customerid;
+	private Integer bookingCustomerId;
 	
 	@Column(name = "triptypeid")
 	private String tripTypeId;
 	
 	
 	@Column(name = "packageid")
-	 private Integer packageid;
+	 private Integer bookingPackageId;
 	
 	@Transient //this is to ignore any instance variables not in the database
 	private String formattedDate;
@@ -71,8 +75,10 @@ public class Booking implements Serializable{
 	}
 	
 	//This gets rid of the table constraint for entities (so that you can use Package p)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name="packageid", referencedColumnName="packageid")
+	@JsonIgnore
+	@Transient //ignores package in the database until necessary
 	private Package p;
 	
 	public Package getPackage()
@@ -122,11 +128,11 @@ public class Booking implements Serializable{
 	}
 
 	public Integer getCustomerid() {
-		return customerid;
+		return bookingCustomerId;
 	}
 
 	public void setCustomerid(Integer customerid) {
-		this.customerid = customerid;
+		this.bookingCustomerId = customerid;
 	}
 
 	public String getTripTypeId() {
@@ -138,11 +144,11 @@ public class Booking implements Serializable{
 	}
 
 	public Integer getPackageId() {
-		return packageid;
+		return bookingPackageId;
 	}
 
 	public void setPackageId(Integer packageid) {
-		this.packageid = packageid;
+		this.bookingPackageId = packageid;
 	}
 
 
