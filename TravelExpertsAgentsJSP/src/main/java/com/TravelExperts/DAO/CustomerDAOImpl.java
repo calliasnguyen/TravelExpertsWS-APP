@@ -2,11 +2,13 @@ package com.TravelExperts.DAO;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.LoggerFactory;
 
+import com.TravelExperts.Model.Agent;
 import com.TravelExperts.Model.Customer;
 
 public class CustomerDAOImpl implements CustomerDAO{
@@ -113,6 +115,21 @@ public class CustomerDAOImpl implements CustomerDAO{
 			
 			//will return one list of agent.. so we will grab the 0th value
 			customer = (Customer) query.list().get(0);
+			
+			//grab agent for specific customer by the id
+			Integer agentID = customer.getAgentId();
+			System.out.println(agentID);
+			//grabbing the agent object by ID if the customer has an assigned agent
+				if(agentID != null)
+				{
+					Agent customerAgent = (Agent) session.load(Agent.class, agentID);
+					Hibernate.initialize(customerAgent);
+					
+					//setting the customer's agent
+					customer.setAgent(customerAgent);
+					
+				}
+			
 			
 			}
 			

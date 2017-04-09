@@ -12,5 +12,6 @@ public interface PackageService {
 	public void updatePackage(Package p);
 	public void removePackage(int id);
 	public Package getPackageById(int id);
+	public Package grabProductSuppliers(int id);
 	
 }

@@ -8,6 +8,7 @@ public interface BookingDAO {
 	
 	public List<Booking> getAllBookings();
 	public List<Booking> getBookingsByCustomerId(int id);
+	public Booking getBookingById(int id);
 	public void addBooking(Booking b);
 	public void updateBooking(Booking b);
 	public void removeBooking(int id);

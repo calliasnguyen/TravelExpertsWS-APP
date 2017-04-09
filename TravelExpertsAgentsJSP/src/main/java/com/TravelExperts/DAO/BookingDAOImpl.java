@@ -2,6 +2,7 @@ package com.TravelExperts.DAO;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TravelExperts.Model.Booking;
+import com.TravelExperts.Model.BookingDetail;
 
 public class BookingDAOImpl implements BookingDAO {
 
@@ -43,6 +45,38 @@ public class BookingDAOImpl implements BookingDAO {
 		query.setParameter(0, new Integer(id));
 		List<Booking> bookingByCustomer = query.list();
 		
+		try
+		{
+			//grab the booking detail by bookingID
+			for(Booking booking: bookingByCustomer)
+			{	//grab the bookingId to grab the bookingDetails
+				Integer bookingId  = booking.getBookingId();
+				
+				
+					
+				//grabbing the bookingDetail from the bookingID	
+				String selectBookingDetail = "Select bd from BookingDetail bd where bd.bookingId = :bookingDetailId";
+				Query queryBookingDetail = session.createQuery(selectBookingDetail);
+				queryBookingDetail.setInteger("bookingDetailId", bookingId);
+				
+				//if there is a bookingdetail by booking id... then
+				if(queryBookingDetail.list().size() > 0)
+				{
+				//grab the bookingDetail from the query
+				List<BookingDetail> bookingDetail = (List<BookingDetail>) queryBookingDetail.list();
+					
+			
+				Hibernate.initialize(bookingDetail);
+				booking.setBookingDetail(bookingDetail);
+				}	
+			
+			 }
+		}catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+				
 		logger.info("Booking by customer has been loaded!");
 		return bookingByCustomer;
 	}
@@ -72,6 +106,24 @@ public class BookingDAOImpl implements BookingDAO {
 		}
 		logger.info("Booking has been deleted succesfully in the database, Booking Details=" + b);
 		
+	}
+
+	@Override
+	public Booking getBookingById(int id) {
+		Session session = this.sessionFactory.getCurrentSession();
+		Booking booking = null;
+		
+		try
+		{
+		 booking = (Booking) session.load(Booking.class, new Integer(id));
+		 logger.info("Booking has been grabbed by the database, Booking=" + booking);
+		}catch(Exception e)
+		{
+			System.out.println("Client is asking for a booking that does not exist " + e.getMessage());
+		}
+		
+		
+		return booking;
 	}
 
 	

@@ -32,11 +32,16 @@
 	
 	
 	<!--  Change your travel experts information here -->
+	<!--  Confiugred jdbc for timezone issue: jdbc:mysql://localhost:3306/travelexperts?useLegacyDatetimeCode=false&amp;serverTimezone=America/Edmonton  -->
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-		<beans:property name="url" value="jdbc:mysql://localhost:3306/travelexperts?useLegacyDatetimeCode=false&amp;serverTimezone=America/Edmonton" />
+		<beans:property name="url" value="jdbc:mysql://localhost:3306/travelexperts?autoReconnect=true" />
 		<beans:property name="username" value="root" />
 		<beans:property name="password" value="Nguyen01" />
+		
+		<!--  Test this for the wait timeout on my server -->
+		<beans:property name="validationQuery" value="SELECT 1"/>
+	
 	</beans:bean>
 	
 		<!-- Hibernate 4 SessionFactory Bean definition -->
@@ -51,8 +56,15 @@
 				<beans:value>com.TravelExperts.Model.Customer</beans:value>
 				<beans:value>com.TravelExperts.Model.Package</beans:value>
 				<beans:value>com.TravelExperts.Model.Booking</beans:value>
+				<beans:value>com.TravelExperts.Model.PackageProductSupplier</beans:value>
+				<beans:value>com.TravelExperts.Model.BookingDetail</beans:value>
+				<beans:value>com.TravelExperts.Model.ProductSupplier</beans:value>
+				<beans:value>com.TravelExperts.Model.Supplier</beans:value>
+				<beans:value>com.TravelExperts.Model.Product</beans:value>
 			</beans:list>
 		</beans:property>
+		
+		<!--  Setting up hibernate properties over here  -->
 		<beans:property name="hibernateProperties">
 			<beans:props>
 				<beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect
@@ -77,11 +89,13 @@
 		</beans:bean>
 	
 	
-	
+	<!--  Setting up the transcation Manager for any SQL related select/update/delete/inserts for Hibernate -->
 	<beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
 	
+	
+	<!-- Setting up Agent DAO, and Agent Service for  Hibernate -->
 	<beans:bean id="agentDAO" class="com.TravelExperts.DAO.AgentDAOImpl">
 		<beans:property name = "sessionFactory" ref="hibernate4AnnotatedSessionFactory"></beans:property>
 	</beans:bean>

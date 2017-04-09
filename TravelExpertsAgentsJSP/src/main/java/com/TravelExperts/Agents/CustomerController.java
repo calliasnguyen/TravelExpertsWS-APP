@@ -2,7 +2,8 @@ package com.TravelExperts.Agents;
 
 import java.util.List;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
+import org.hibernate.Hibernate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.TravelExperts.Model.Agent;
 import com.TravelExperts.Model.Customer;
+import com.TravelExperts.Service.AgentService;
 import com.TravelExperts.Service.CustomerService;
-import com.mysql.cj.fabric.Response;
+
 
 
 @RequestMapping(value = "/Customer")
@@ -29,7 +31,10 @@ public class CustomerController {
 	@Autowired
 	CustomerService customerService;
 	
-	//GET METHOD to grab all Customers
+	@Autowired
+	AgentService agentService;
+	
+	/////////////////////////////////////GET METHOD to grab all Customers//////////////////////////////////
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public @ResponseBody
 	List<Customer> getCustomerlist()
@@ -44,7 +49,7 @@ public class CustomerController {
 		return customerList;
 	}
 	
-	//GET METHOD to grab a customer by ID
+	////////////////////////////////////GET METHOD to grab a customer by ID/////////////////////////////////
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Customer> getCustomerId(@PathVariable("id") Integer id)
 	{
@@ -71,7 +76,8 @@ public class CustomerController {
 		Customer customer = customerService.customerLogin(email, lastname);
 		
 		if(customer != null)
-		{
+		{		
+			//return the customer object with a status 200
 			return new ResponseEntity<Customer>(customer, HttpStatus.OK);	
 		}
 		else
@@ -81,9 +87,9 @@ public class CustomerController {
 	}
 	
 	
-	//Get METHOD to grab a customer by agent's ID
+	///////////////////////////Get METHOD to grab a list of customers by agent's ID///////////////////////////////
 	@RequestMapping(value = "/agent", method = RequestMethod.GET)
-	public @ResponseBody List<Customer> getCustomerByAId(@RequestParam int agentid)
+	public @ResponseBody List<Customer> getCustomerByAgentId(@RequestParam int agentid)
 	{
 			//if nothing is found return null
 		List<Customer> customersbyAgentID = null;
@@ -92,10 +98,12 @@ public class CustomerController {
 	}
 
 	
-	//Adding Customer using RequestMethod POST
+	/////////////////////////Adding Customer using RequestMethod POST//////////////////////////////
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer)
 	{
+		
+		
 		//only customer country,homephone,agent id can be null
 		customerService.addCustomer(customer);
 		return new ResponseEntity<Customer>(customer, HttpStatus.OK);

@@ -23,6 +23,14 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Add a Customer</title>
+<Style>
+ .error {
+        color: red; font-weight: bold;
+    }
+
+
+</Style>
+
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -34,6 +42,8 @@
 	      <li><a href="<c:url value="home"/>">Home</a></li>
 	      <li> <a href="./">Add/Edit Agent</a></li>
 	      <li><a href="bookings">Bookings</a></li>
+	       <li><a href="package">Packages</a></li>
+	      <li><a href="documentation/">API Documentation</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span>Sign Up Customer</a></li>
@@ -45,12 +55,42 @@
 <!-- Header for new Customer -->
 <h2 style="text-align:center">Add a New Customer</h2>
 
+<!-- If the value for success it true.. then show modal -->
+<c:if test="${param.customerSuccess != null}" >
 
-<!-- TESTING UP SESSIONS HERE -->
-<!-- 
- <p>session testing ${testing.agtFirstName} ... session agentLogin ${agentLogin.agtFirstName }</p>
-<p> session testing controller's agentlogin ${agentlogin.getAgentId()} </p>
- -->
+<!-- Script for launching a modal whenever the page is loaded-->
+<script type="text/javascript">
+$(document).ready(function(){ 
+        $('#myModal').modal('show');
+    });
+</script>
+
+</c:if>
+<!-- End of script -->
+
+
+
+<!--  Beginning of Customer  Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><strong>Success!</strong></h5>
+  
+      </div>
+      <div class="modal-body">
+        This customer has been added to the database!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end of the modal -->
+
+
  
  
 <!-- Beginning of the form -->
@@ -67,7 +107,8 @@
 			</form:label>
 	
 		<form:input path="customerFirstName" id="customerfirstname" name="customerfirstname" class="form-control"
-		 placeholder="Enter your First Name" /> </div>
+		 placeholder="Enter your First Name (Required)" /> </div>
+		<p><form:errors path="customerFirstName" cssClass="error"/></p>
 	
 	
 	<!-- Customer Last Name -->
@@ -76,8 +117,9 @@
 			<spring:message text="Last Name:"/>
 			</form:label>
 
-		<form:input path="customerLastName" placeholder="Enter your Last Name" class="form-control" />
+		<form:input path="customerLastName" placeholder="Enter your Last Name (Required)" class="form-control" />
 		</div>
+		<p><form:errors path="customerLastName" cssClass="error"/></p>
 		
 		<!--Customer Address -->
 		<div class="form-group">
@@ -85,8 +127,9 @@
 			<spring:message text="Address:"/>
 			</form:label>
 	
-		<form:input path="customerAddress" placeholder="Enter your Address" class="form-control"/>
+		<form:input path="customerAddress" placeholder="Enter your Address (Required)" class="form-control"/>
 		</div>
+		<p><form:errors path="customerAddress" cssClass="error"/></p>
 	
 	<!--  Cusomter City -->
 		<div class="form-group">
@@ -94,24 +137,27 @@
 			<spring:message text="City:"/>
 			</form:label>
 		
-			<form:input path="customerCity" placeholder="Enter your City" class="form-control"/>
+			<form:input path="customerCity" placeholder="Enter your City (Required)" class="form-control"/>
 		</div>	
+		<p><form:errors path="customerCity" cssClass="error"/></p>
 		
 	<!--  Customer Province-->
 		<div class="form-group">
 		<form:label path="customerProvince">
-			<spring:message text="Province:"/>
+			<spring:message text="Province Code:"/>
 			</form:label>
-		<form:input path="customerProvince" placeholder="Enter your Province" class="form-control" />
+		<form:input path="customerProvince" placeholder="Enter your Province Code (Required) Example: AB, BC" class="form-control" />
 		</div>
+		<p><form:errors path="customerProvince" cssClass="error"/></p>
 		<!--  Agency postal -->
 		<div class="form-group">
 		<form:label path="customerPostal">
 			<spring:message text="Postal Code:"/>
 			</form:label>
 
-		<form:input path="customerPostal" placeholder="Enter your Postal Code" class="form-control"/>
+		<form:input path="customerPostal" placeholder="Enter your Postal Code (Required)" class="form-control"/>
 		</div>
+		<p><form:errors path="customerPostal" cssClass="error"/></p>
 		
 		<!--  Customer Country -->
 		<div class="form-group">
@@ -119,7 +165,7 @@
 			<spring:message text="Country:"/>
 			</form:label>
 
-		<form:input path="customerCountry" placeholder="Enter your Country" class="form-control"/>
+		<form:input path="customerCountry" placeholder="Enter your Country (Optional)" class="form-control"/>
 		</div>
 	
 	<!--  Customer home phone -->
@@ -128,7 +174,7 @@
 			<spring:message text="Home Phone Number:"/>
 			</form:label>
 
-		<form:input path="customerHomePhone" placeholder="Enter your Home Phone " class="form-control"/>
+		<form:input path="customerHomePhone" placeholder="Enter your Home Phone (Optional)" class="form-control"/>
 		</div>
 	
 	<!--  Customer business phone -->
@@ -137,8 +183,9 @@
 			<spring:message text="Business Phone Number:"/>
 			</form:label>
 
-		<form:input path="customerBusPhone" placeholder="Enter your Business Phone #" class="form-control"/>
+		<form:input path="customerBusPhone" placeholder="Enter your Business Phone (Required)" class="form-control"/>
 		</div>
+		<p><form:errors path="customerBusPhone" cssClass="error"/></p>
 	
 		<!--  Customer Email-->
 		<div class="form-group">
@@ -146,8 +193,9 @@
 			<spring:message text="Email Address:"/>
 			</form:label>
 
-		<form:input path="customerEmail" placeholder="Enter your Email Address" class="form-control"/>
+		<form:input path="customerEmail" placeholder="Enter your Email Address (Required)" class="form-control" />
 		</div>
+		<p><form:errors path="customerEmail" cssClass="error"/></p>
 	
 	
 	

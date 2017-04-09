@@ -29,6 +29,18 @@
 background-color: #26A69A;
 }
 
+div {
+border-radius: 0px;
+
+}
+
+div.modalborder {
+
+
+    border:1px solid #E5E5E5;
+      margin: 0 auto;
+}
+
 </style>
 
 </head>
@@ -44,6 +56,8 @@ background-color: #26A69A;
  
       <li> <a href="<c:url value="./" />">Add/Edit Agent</a></li>
       <li class="active"><a href="bookings">Bookings</a></li>
+       <li><a href="package">Packages</a></li>
+      <li><a href="documentation/">API Documentation</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li><a href="customer"><span class="glyphicon glyphicon-user"></span>Sign Up Customer</a></li>
@@ -60,16 +74,45 @@ background-color: #26A69A;
 	<c:forEach items="${listCustomer}" var="customer">
 	<br>
 	<!-- Label the Customer -->
-<!-- 	<h4 style="font-weight:bold" >Customer: ${customer.customerFirstName} ${customer.customerLastName}</h4>  -->
-	
-	    <div class="panel panel-primary">
-      <div class="panel-heading">Customer Information: ${customer.customerFirstName} ${customer.customerLastName}</div>
+
+	    <div id="customerinfo" class="list-group">
+      <span style="cursor:pointer" data-toggle="modal" data-target="#${customer.customerId }" class="list-group-item active">Customer Information: ${customer.customerFirstName} ${customer.customerLastName}</span>
      
     </div>
 	
+	<!-- Modal for sending an email to Customer -->
+	
+	<div class="modal fade" id="${customer.customerId }" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><strong>New message for ${customer.customerFirstName} ${customer.customerLastName}: </strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="form-control-label">Recipient:</label>
+            <input type="text" class="form-control" placeholder="${customer.customerEmail}" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="form-control-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
 	
 	
-	
+	<!-- End of sending email to Customer -->
 	<!--  Table for all the Customer information  -->
 	<div class="container">
 	<div class="table-responsive">
@@ -134,7 +177,7 @@ background-color: #26A69A;
 
 	<!-- Start of table for each booking for a customer -->
 	
-	<tr class="table-info">
+	<tr  style="cursor:pointer" class="table-info" data-toggle="modal" data-target="#${booking.bookingId}">
 		<th scope="row">${booking.bookingId}</th>
 		<td>${booking.formattedDate}</td>
 		<td>${booking.travelerCount}</td>
@@ -143,8 +186,46 @@ background-color: #26A69A;
 	
 	</tr>
 	
+	<!-- Modal Configuration -->
+	<!--  if this bookingdetail for this booking is not empty -->
+	<c:if test="${!empty booking.bookingDetail}"> 
 	
-	
+	<div class="modal fade" id="${booking.bookingId}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="font-weight:bold;" style="text-align:center;" class="modal-title" id="exampleModalLabel">Booking Details for ${customer.customerFirstName} ${customer.customerLastName} booking number: ${booking.bookingId} </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<!--  Grabbing bookingDetails information -->
+         <c:forEach items="${booking.bookingDetail}" var="bookingDetails">
+  		 <div class="modalborder">
+  	
+   		<p style="text-align:center"><strong>Destination:</strong>${bookingDetails.destination} 	<strong>Description: </strong> ${bookingDetails.description}</p>
+   		
+   		<p style="text-align:center"><strong>Fee Id:</strong>${bookingDetails.feeid} 	<strong>Class ID:</strong> ${bookingDetails.classId}</p>
+   		
+   	
+   		<p style="text-align:center"><strong>Start Date: </strong>${bookingDetails.tripStart}  <strong>End Date: </strong>${bookingDetails.tripEnd}</p>
+   		
+   		<p style="text-align:center"><strong>Base Price Cost:</strong>${bookingDetails.basePrice}</p>
+   	     </div>  
+       <br/>
+        </c:forEach>
+        <!-- End of the bookingDetails Information -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+	</c:if>
+	<!--  End of Modal Configuration -->
 	 </c:forEach>
 	 </tbody>
 	 </table>

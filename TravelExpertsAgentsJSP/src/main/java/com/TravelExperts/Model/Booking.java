@@ -3,6 +3,7 @@ package com.TravelExperts.Model;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,6 +34,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(proxyMode=ScopedProxyMode.TARGET_CLASS, value="session")
+
+//NEED TO USE JSONIGNOREPROPERTIES, and PROXY to initialize JSON format for retrieving Booking's by ID
+@JsonIgnoreProperties(ignoreUnknown = false)
+@Proxy(lazy = false)
 public class Booking implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -81,6 +86,23 @@ public class Booking implements Serializable{
 	@Transient //ignores package in the database until necessary
 	private Package p;
 	
+	
+	//set this up for bookingDetails
+	@Transient
+	private List<BookingDetail> bookingDetails;
+	
+	
+	
+	public List<BookingDetail> getBookingDetail() {
+		return bookingDetails;
+	}
+
+	public void setBookingDetail(List<BookingDetail> bookingDetails) {
+		this.bookingDetails = bookingDetails;
+	}
+
+	
+	
 	public Package getPackage()
 	{
 		
@@ -91,7 +113,6 @@ public class Booking implements Serializable{
 	{
 		this.p = p;
 	}
-	
 	
 
 	public Integer getBookingId() {

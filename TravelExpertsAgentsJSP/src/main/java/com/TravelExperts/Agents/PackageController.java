@@ -39,49 +39,37 @@ public class PackageController{
 	
 	/////////////////////////////////////////////////////Get Method to grab all packages//////////////////////////////////////////////////////////
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public ResponseEntity<List<Package>> getPackageList(@RequestParam String agentAuthorization)
+	public ResponseEntity<List<Package>> getPackageList()
 	{
-		//Authorize the agent and if this agent does not exist return badRequest (unauthorized )401
-		List<Package> packageList = null;
-		if(agentService.isValidAgentAuthorization(agentAuthorization))
-			{
-			
+		List<Package> packageList = null;		
+
+		try
+		{
+			packageList = packageService.listPackage();
 				
-				try{
-					packageList = packageService.listPackage();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-				return new ResponseEntity<List<Package>>(packageList, HttpStatus.OK);
-			
-			}else
-				return new ResponseEntity<List<Package>>(packageList, HttpStatus.UNAUTHORIZED);
+		}catch(Exception e)
+		{
+		e.printStackTrace();
+		}
+		return new ResponseEntity<List<Package>>(packageList, HttpStatus.OK);
 		
 	
 	}
 	
 	////////////////////////////////////////////////////Get method for a specific Package///////////////////////////////////////////////////////////
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Package> getPackageById(@PathVariable("id") Integer id,@RequestParam String agentAuthorization)
+	public ResponseEntity<Package> getPackageById(@PathVariable("id") Integer id)
 	{
 		Package p = null;
-		
-		//if agentAuthorization is valid then go ahead with grabbing the information 
-		//otherwise send a 401 UNAUTHORIZED
-		if(agentService.isValidAgentAuthorization(agentAuthorization))
-		{
-
+			
 			 p = packageService.getPackageById(id);
 			return new ResponseEntity<Package>(p, HttpStatus.OK);
-		}
-		else
-			return new ResponseEntity<Package>(p,HttpStatus.UNAUTHORIZED);
-		
+
 	}
 	
 	
 	/////////////////////////////////////////////////////////Update a package  Post request/////////////////////////////////////////////////////////////
-	@RequestMapping(value="/update",method=RequestMethod.POST)
+	@RequestMapping(value="/update",method=RequestMethod.PUT)
 	public ResponseEntity<Package> updatePackage(@RequestBody Package p,@RequestParam String agentAuthorization)
 	{
 		//if agentAuthorization is valid then go ahead with grabbing the information 
@@ -115,7 +103,7 @@ public class PackageController{
 	}
 	
 	////////////////////////////////////////////////////////////////Remove a Package by ID///////////////////////////////////////////////////////////////
-	@RequestMapping(value="/remove/{id}", method=RequestMethod.POST)
+	@RequestMapping(value="/remove/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<?> removePackage(@PathVariable("id") Integer id,@RequestParam String agentAuthorization)
 	{//bug to fix the response strings
 		//if agentAuthorization is valid then go ahead with grabbing the information 
@@ -129,4 +117,18 @@ public class PackageController{
 			return new ResponseEntity<String>("Unauthorized request",HttpStatus.UNAUTHORIZED);	
 		}
 	
+	//////////////////////////////////////////////////////Get package id and then the packageproductsupplier id////////////
+	@RequestMapping(value="/test/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Package> getPackage(@PathVariable("id") Integer id)
+	{
+		Package p = packageService.grabProductSuppliers(id);
+		
+		if(p != null)
+		{
+		return new ResponseEntity<Package>(p, HttpStatus.OK);
+		}
+		else
+			return new ResponseEntity<Package>(p,HttpStatus.BAD_REQUEST);
+		
+	}
 }

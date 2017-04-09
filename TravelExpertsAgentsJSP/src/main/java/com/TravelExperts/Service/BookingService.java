@@ -11,5 +11,5 @@ public interface BookingService {
 	public void addBooking(Booking b);
 	public void updateBooking(Booking b);
 	public void removeBooking(int id);
-	
+	public Booking getBookingById(int id);
 }

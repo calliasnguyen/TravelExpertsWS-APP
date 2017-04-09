@@ -50,6 +50,13 @@ public class BookingServiceImpl implements BookingService {
 		
 	}
 
+	@Transactional
+	@Override
+	public Booking getBookingById(int id) {
+	
+		return bookingDAO.getBookingById(id);
+	}
+
 	
 	
 	

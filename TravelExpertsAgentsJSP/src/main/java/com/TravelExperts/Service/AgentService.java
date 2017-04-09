@@ -14,5 +14,5 @@ public interface AgentService {
 	public boolean isValidAgent(String agtFirstName, String agtLastName);
 	public Agent returnAgentbyName(String firstName, String lastName);
 	public boolean isValidAgentAuthorization(String agtAuthorization);
-
+	public Agent loginAgentByEmail(String agentEmail, String agentLastName);
 }

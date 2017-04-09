@@ -10,7 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.hibernate.annotations.Proxy;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -19,6 +25,12 @@ import org.springframework.context.annotation.ScopedProxyMode;
 
 @Entity
 @Table(name="agents")
+
+//NEED TO USE JSONIGNOREPROPERTIES, and PROXY to initialize JSON format for retrieving Agent's by ID
+//error parsing using jackson for individual ID's
+@JsonIgnoreProperties(ignoreUnknown = false)
+@Proxy(lazy = false)
+
 
 //trying component and scope to see if this will allow sessions to pass
 @Component
@@ -38,21 +50,28 @@ public class Agent implements Serializable {
 	private Integer agentId;
 	
 	@Column(name="agtfirstname")
+	@NotEmpty(message="Agent First Name cannot be empty!")
 	private String agtFirstName;
 	
 	@Column(name="agtmiddleinitial")
+	@NotEmpty(message="Agent Middle Initial cannot be empty!")
+	@Size(min = 1, max = 2, message="Middle Initial cannot be more than 2 characters!")
 	private String agtMiddleInitial;
 	
 	@Column(name="agtlastname")
+	@NotEmpty(message="Agent Last Name cannot be empty!")
 	private String agtLastName;
 	
 	@Column(name="agtbusphone")
+	@NotEmpty(message="Agent Business Phone cannot be empty!")
 	private String agtBusPhone;
 	
 	@Column(name="agtemail")
+	@NotEmpty(message="Agent Email cannot be empty!")
 	private String agtEmail;
 	
 	@Column(name="agtposition")
+	@NotEmpty(message="Agent Position cannot be empty")
 	private String agtPosition;
 	
 	@Column(name="agencyid")
@@ -62,6 +81,9 @@ public class Agent implements Serializable {
 	@Column(name="agtauthorization")
 	private String agtAuthorization;
 	
+	
+	
+	 @JsonIgnore // Never sending out the agent Authorization 
 	public String getAgentAuthorization() {
 		return agtAuthorization;
 	}

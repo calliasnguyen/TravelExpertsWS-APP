@@ -161,5 +161,41 @@ public class AgentDAOImpl implements AgentDAO {
 			return agent;
 	}
 
+	@Override
+	public Agent loginAgentByEmail(String agentEmail, String agentLastName) {
+		
+		//Set agent as null
+		Agent agent = null;
+		
+		try{
+			Session session = this.sessionFactory.getCurrentSession();
+			String emailValidationStatement = "Select a from Agent a where a.agtEmail = :agtEmail AND a.agtLastName = :agtLastName";
+			Query query = session.createQuery(emailValidationStatement);
+			query.setString("agtEmail", agentEmail);
+			query.setString("agtLastName", agentLastName);
+			
+			
+			//grabbing if the agent exists
+			Integer agtAuthorizationConfirmation = query.list().size();
+			
+			if(agtAuthorizationConfirmation > 0)
+			{
+			//Extract the agent out of the list
+			agent = (Agent) query.list().get(0);
+			}
+			
+			return agent;
+		}catch(Exception e)
+		{	//writing the error if there is an sql error, or if the agent does not exist
+			System.out.println(e.getMessage() + e.getCause());
+		}
+		return agent;
+		
+		
+		
+	}
+
+	
+
 
 }

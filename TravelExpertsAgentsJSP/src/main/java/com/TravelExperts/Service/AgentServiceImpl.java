@@ -77,4 +77,12 @@ public class AgentServiceImpl implements AgentService {
 		return this.agentDAO.isValidAgentAuthorization(agtAuthorization);
 	}
 
+
+	@Override
+	@Transactional
+	public Agent loginAgentByEmail(String agentEmail, String agentLastName) {
+		
+		return this.agentDAO.loginAgentByEmail(agentEmail, agentLastName);
+	}
+
 }

@@ -17,7 +17,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>Bootstrap Case</title>
+  <title>Index Page</title>
 
 	<!-- Tags for Bootstrap & AJAX -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -58,16 +58,57 @@
   </script>
 
   <style>
-
-div.jumbotron {
+/* Trying out different styles for JumboTron */
+/* div.jumbotron {
 background-color: #286090;
 color: white;
 text-align: center;
+} */
+
+/* TESTING OUT JUMBOTRON */
+
+
+.bg {
+  background: url('<c:url value="/resources/images/fall.jpg" />') no-repeat center center;
+ position: fixed; 
+  width: 100%;
+   filter: grayscale(10%);
+  height: 325px; /*same height as jumbotron */
+  top:0;
+  left:0;
+  z-index: -1;
+  ;
+} 
+
+
+
+
+.jumbotron {
+  margin-bottom: 0px;
+  height: 275px;
+  color: white;
+  text-align: center;
+  background:transparent;
+}
+/* END OF TEST */
+
+
+ h1, h3 {
+    font-family:Roboto slab;
+    opacity: 0.9;    
+}
+
+
+p {
+  font-family:Roboto slab;
+    opacity: 0.9; 
+
 }
 
 </style>
 
-  
+  <!-- Google Font Test -->
+<link href='//fonts.googleapis.com/css?family=Roboto slab' rel='stylesheet'>
 
 </head>
 <body>
@@ -91,6 +132,8 @@ text-align: center;
  
       <li> <a href="<c:url value="${agentURL} " />">Add/Edit Agent</a></li>
       <li><a href="bookings">Bookings</a></li>
+       <li><a href="package">Packages</a></li>
+      <li><a href="documentation/">API Documentation</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li><a href="customer"><span class="glyphicon glyphicon-user"></span>Sign Up Customer</a></li>
@@ -99,16 +142,17 @@ text-align: center;
   </div>
 </nav>
   <!-- Beginning of the jumbotron Div -->
+  <div class="bg"></div>
 <div class="jumbotron">
   
   <!--  on login if the agent is not empty, put his name here -->
   <c:if test="${!empty agent.agtFirstName }">
-  <h2>Welcome Back ${agent.agtFirstName} ${agent.agtLastName }! </h2> 
+  <h1>Welcome Back ${agent.agtFirstName} ${agent.agtLastName } </h1> 
   </c:if>
   
   <!--  on index return if the agent is empty... put his name here using sessions of agentlogin -->
   <c:if test="${empty agent.agtFirstName }">
-  <h2>Welcome Back ${agentlogin.agtFirstName} ${agentlogin.agtLastName }! </h2> 
+  <h1>Welcome Back ${agentlogin.agtFirstName} ${agentlogin.agtLastName }! </h1> 
   </c:if>
   
   
@@ -129,32 +173,32 @@ text-align: center;
   <div class="row">
     <div class="col-md-4">
       <div class="thumbnail">
-        <a href="home" target="_blank">
+       
           <img src="<c:url value="/resources/images/beach.jpg" />" alt="Lights" style="width:100%">
           <div class="caption">
             <p>Bahamas Vacation Package</p>
           </div>
-        </a>
+       
       </div>
     </div>
     <div class="col-md-4">
       <div class="thumbnail">
-        <a href="home" target="_blank">
+        
           <img src="<c:url value="/resources/images/nightStars.jpg" />" alt="Nature" style="width:100%">
           <div class="caption">
             <p>Vancouver Island Package</p>
           </div>
-        </a>
+        
       </div>
     </div>
     <div class="col-md-4">
       <div class="thumbnail">
-        <a href="home" target="_blank">
+
           <img src="<c:url value="/resources/images/paris.jpg" />" alt="Fjords" style="width:100%">
           <div class="caption">
             <p>Europe Package</p>
           </div>
-        </a>
+      
       </div>
     </div>
   </div>

@@ -24,10 +24,50 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  
-	<title>Agent Database</title>	
+	<title>Agent Database</title>
+	
+	<style>
+    .error {
+        color: red; font-weight: bold;
+    }
+</style>
+		
 </head>
 <body>
 
+<!-- If the value for success it true.. then show modal -->
+<c:if test="${param.agentSuccess != null}" >
+
+<!-- Script for launching a modal whenever the page is loaded on adding/editing-->
+<script type="text/javascript">
+$(document).ready(function(){ 
+        $('#myModal').modal('show');
+    });
+</script>
+
+</c:if>
+<!-- End of script -->
+
+<!--  Beginning of the Modal -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><strong>Success!</strong></h5>
+  
+      </div>
+      <div class="modal-body">
+        This package has been ${param.agentSuccess}! 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end of the modal -->
 
 
 <!-- session variable Agent --><!-- CANNOT RESTORE A SESSION OBJECT AGAIN ONCE SERIALZABLE YOU NEED TO FIGURE ANOTHER WAY -->
@@ -37,6 +77,8 @@
 	 -->
 	
 <!-- Trying to map the home and index pages here -->
+<!-- If the agent is empty.. add a new agent  this will be the nav bar for the site -->
+<c:if test="${empty agent.agtFirstName }">
 <c:url var="homeURL" value="./home">
 </c:url>
 
@@ -49,6 +91,8 @@
 	      <li><a href="<c:url value="${homeURL}"/>">Home</a></li>
 	      <li class="active"> <a href="#">Add/Edit Agent</a></li>
 	      <li><a href="bookings">Bookings</a></li>
+	       <li><a href="package">Packages</a></li>
+	      <li><a href="documentation/">API Documentation</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="customer"><span class="glyphicon glyphicon-user"></span>Sign Up Customer</a></li>
@@ -56,6 +100,32 @@
 	    </ul>
 	  </div>
 	</nav>
+</c:if>
+
+<!-- If we are editing agents... then we have to edit the url for the nav  -->
+
+<c:if test="${!empty agent.agtFirstName }">
+
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">Travel Experts</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="../home">Home</a></li>
+	      <li class="active"> <a href="#">Add/Edit Agent</a></li>
+	      <li><a href="../bookings">Bookings</a></li>
+	       <li><a href="package">Packages</a></li>
+	      <li><a href="../documentation/">API Documentation</a></li>
+	    </ul>
+	    <ul class="nav navbar-nav navbar-right">
+	      <li><a href="../customer"><span class="glyphicon glyphicon-user"></span>Sign Up Customer</a></li>
+	      <li><a href="../login"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
+</c:if>
+
 
 <!-- Begin by Adding a new agent -->
 <c:if test="${!empty agent.agtFirstName }">
@@ -64,15 +134,6 @@
 <c:if test="${empty agent.agtFirstName }">
 <h2 style="text-align:center">Add a New Agent</h2>
 </c:if>
-
-
-					<!-- TESTING SERIALIZABLE AND TESTING SESSION VARIABLES HERE -->
-<!-- Testing session variables and parameters -->
-<!-- 
-<p>hello ${agentLogin.agtFirstName}</p>
-<p>moving session testing ${testing.agtFirstName }</p>
- -->
-
 
 
 
@@ -111,9 +172,9 @@
 			<spring:message text="First Name:"/>
 			</form:label>
 	
-		<form:input path="agtFirstName" id="agtfirstname" name="agtfirstname" class="form-control" placeholder="Enter Agent's first name" /> <!-- Saying that if the agent First Name has a value.. then put it in otherwise leave it blank -->
+		<form:input path="agtFirstName" id="agtfirstname" name="agtfirstname" class="form-control" placeholder="Enter Agent's first name (Required)"  /> <!-- Saying that if the agent First Name has a value.. then put it in otherwise leave it blank -->
 		</div>
-	
+		<p><form:errors path="agtFirstName" cssClass="error"/></p>
 	
 	<!-- Agent Middle Initial -->
 		<div class="form-group">
@@ -121,24 +182,28 @@
 			<spring:message text="Middle Initial:"/>
 			</form:label>
 
-		<form:input path="agtMiddleInitial" placeholder="Enter your middle initial" class="form-control" />
+		<form:input path="agtMiddleInitial" placeholder="Enter your middle initial (Required)" class="form-control" />
 		</div>
+		<p><form:errors path="agtMiddleInitial" cssClass="error"/></p>
 	<!-- Agent Last Name -->
 		<div class="form-group">
 		<form:label path="agtLastName">
 			<spring:message text="Last Name:"/>
 			</form:label>
 
-		<form:input path="agtLastName" placeholder="Enter your last name" class="form-control" />
+		<form:input path="agtLastName" placeholder="Enter your last name (Required)" class="form-control" />
 		</div>
+		<p><form:errors path="agtLastName" cssClass="error"/></p>
+		
 		<!-- Agent Business Phone -->
 		<div class="form-group">
 		<form:label path="agtBusPhone">
 			<spring:message text="Business Phone#:"/>
 			</form:label>
 	
-		<form:input path="agtBusPhone" placeholder="Enter your Phone Number" class="form-control"/>
+		<form:input path="agtBusPhone" placeholder="Enter your Phone Number (Required)" class="form-control"/>
 		</div>
+			<p><form:errors path="agtBusPhone" cssClass="error"/></p>
 	
 	<!--  Agent Email -->
 		<div class="form-group">
@@ -146,22 +211,24 @@
 			<spring:message text="Email:"/>
 			</form:label>
 		
-			<form:input path="agtEmail" placeholder="Enter your email address" class="form-control"/>
+			<form:input path="agtEmail" placeholder="Enter your email address (Required)" class="form-control"/>
 		</div>	
+		<p><form:errors path="agtEmail" cssClass="error"/></p>
 	<!--  Agent Position -->
 		<div class="form-group">
 		<form:label path="agtPosition">
 			<spring:message text="Agent Position:"/>
 			</form:label>
-		<form:input path="agtPosition" placeholder="Enter your position" class="form-control" />
+		<form:input path="agtPosition" placeholder="Enter your position (Required)" class="form-control" />
 		</div>
+		<p><form:errors path="agtPosition" cssClass="error"/></p>
 		<!--  Agency ID -->
 		<div class="form-group">
 		<form:label path="agencyid">
 			<spring:message text="Agency ID:"/>
 			</form:label>
 
-		<form:input path="agencyid" placeholder="Enter your agency ID" class="form-control"/>
+		<form:input path="agencyid" placeholder="Enter your agency ID (Optional)" class="form-control"/>
 		</div>
 	
 	<!-- Button edit or add new Agent -->

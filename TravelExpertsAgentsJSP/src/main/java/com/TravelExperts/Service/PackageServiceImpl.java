@@ -51,6 +51,13 @@ public class PackageServiceImpl implements PackageService {
 		return this.packageDAO.getPackageById(id);
 	}
 
+	@Transactional
+	@Override
+	public Package grabProductSuppliers(int id) {
+		
+		return this.packageDAO.grabProductSuppliers(id);
+	}
+
 	
 	
 	
