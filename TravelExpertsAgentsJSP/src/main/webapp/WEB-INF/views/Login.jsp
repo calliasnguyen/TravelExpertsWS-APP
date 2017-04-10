@@ -19,10 +19,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<!-- Angular JS -->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 
-
+<!--  javascript file for angular -->
 <script src="<c:url value="/resources/angularFiles/testApplication.js" />"></script>
 
 <style>
@@ -35,18 +33,7 @@ text-align: center;
 
 </style>
 </head>
-<body ng-app="testApplication" ng-controller="MainController as main">
-
-<input type="number" ng-model="main.num1" />
-<input type="number" ng-model="main.num2" />
-<h1>Sum: {{main.num1 + main.num2}}</h1>
-
-<label>Search for: <input type="text" ng-model="searchfor" /></label>
-
-<div ng-repeat="name in names | filter:searchfor">
-<p ng-model="names">elaine samath</p>
-<label ng-model="names">ted smith</label>
-</div>
+<body>
 
 <!-- Header For the Agent Database -->
 <div class="jumbotron">

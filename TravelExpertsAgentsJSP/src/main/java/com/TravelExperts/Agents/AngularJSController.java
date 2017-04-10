@@ -18,7 +18,7 @@ import com.TravelExperts.Service.CustomerService;
 
 @Controller
 @Scope("request")
-@RequestMapping("/angular")
+@RequestMapping("/customerlist")
 public class AngularJSController {
 	
 	

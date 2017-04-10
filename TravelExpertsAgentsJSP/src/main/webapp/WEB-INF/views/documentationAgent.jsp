@@ -44,6 +44,7 @@
 	      <li><a href="../bookings">Bookings</a></li>
 	       <li><a href="../package">Packages</a></li>
 	     <li class="active"><a href="">API Documentation</a></li>
+	     <li ><a href="../customerlist/">Customers</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="../customer"><span class="glyphicon glyphicon-user"></span>Sign Up Customer</a></li>
