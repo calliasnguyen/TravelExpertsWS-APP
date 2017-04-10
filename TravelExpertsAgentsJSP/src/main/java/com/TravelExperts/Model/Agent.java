@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -75,6 +77,8 @@ public class Agent implements Serializable {
 	private String agtPosition;
 	
 	@Column(name="agencyid")
+	@Min(value=0)
+	@Max(value=3 )
 	private Integer agencyid;
 	
 	//Added this to the database on myphpadmin

@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Proxy;
-
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import org.springframework.context.annotation.Scope;
@@ -73,6 +73,7 @@ public class Customer implements Serializable {
 	private String customerProvince;
 	
 	@Column(name = "custpostal")
+	@Length(max = 7, message="Postal code cannot be longer than 7 words!")
 	@NotEmpty(message = "Customer Postal Code cannot be empty!")
 	private String customerPostal;
 	

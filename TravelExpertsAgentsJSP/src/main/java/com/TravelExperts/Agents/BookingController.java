@@ -153,7 +153,8 @@ public class BookingController {
 					Agent agent = agentService.getAgentById(agentId);
 					System.out.println(agent.getAgtBusPhone());
 					
-					String phoneNumber = "+17782418749";
+					//String phoneNumber = "+17782418749";
+					String phoneNumber ="1+" + agent.getAgtBusPhone();
 					String msg = "You+have+a+new+booking+from+" + customer.getCustomerFirstName()+"+"+customer.getCustomerLastName();
 					
 					

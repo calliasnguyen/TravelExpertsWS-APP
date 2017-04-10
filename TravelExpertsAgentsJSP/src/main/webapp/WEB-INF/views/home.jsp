@@ -58,7 +58,7 @@ $(document).ready(function(){
   
       </div>
       <div class="modal-body">
-        This package has been ${param.agentSuccess}! 
+        This Agent has been ${param.agentSuccess}! 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
@@ -184,7 +184,7 @@ $(document).ready(function(){
 			<spring:message text="Middle Initial:"/>
 			</form:label>
 
-		<form:input path="agtMiddleInitial" placeholder="Enter your middle initial (Required)" class="form-control" />
+		<form:input path="agtMiddleInitial" placeholder="Enter your middle initial Max 2 Characters!(Required)" class="form-control" />
 		</div>
 		<p><form:errors path="agtMiddleInitial" cssClass="error"/></p>
 	<!-- Agent Last Name -->
@@ -230,7 +230,7 @@ $(document).ready(function(){
 			<spring:message text="Agency ID:"/>
 			</form:label>
 
-		<form:input path="agencyid" placeholder="Enter your agency ID (Optional)" class="form-control"/>
+		<form:input type="text" title="Agency 1 or 2" pattern="\d" path="agencyid" placeholder="Enter your agency ID (Optional)" class="form-control"/>
 		</div>
 	
 	<!-- Button edit or add new Agent -->

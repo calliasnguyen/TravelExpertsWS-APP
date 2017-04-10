@@ -217,8 +217,8 @@ $(document).ready(function(){
 	<tr>
 		<td>${travelpackage.packageid}</td>
 		<td>${travelpackage.packageName}</td>
-		<td>${travelpackage.packageStartDate }</td>
-		<td>${travelpackage.packageEndDate }</td>
+		<td>${travelpackage.formattedPackageStartDate }</td>
+		<td>${travelpackage.formattedPackageEndDate }</td>
 		<td>${travelpackage.packageDescription}</td>
 		<td><a href="<c:url value='/editpackage/${travelpackage.packageid }' />" > Edit</a></td>
 		<td><a href="<c:url value='/removepackage/${travelpackage.packageid }' />" >Delete</a></td>
@@ -309,8 +309,8 @@ $(document).ready(function(){
 			<form:label path="packageBasePrice" >
 			<spring:message text="Base Price:"/>
 			</form:label>
-		
-			<form:input type="number" path="packageBasePrice" placeholder="Enter the Base Price (Required)" class="form-control"/>
+
+			<form:input type="number" step="0.01" min="0.00" max="9999999.99" path="packageBasePrice" placeholder="Enter the Base Price (Required)" class="form-control"/>
 		</div>	
 		<p><form:errors path="packageBasePrice" cssClass="error"/></p>
 	<!--  Agency Commission -->
@@ -318,7 +318,7 @@ $(document).ready(function(){
 		<form:label path="packageAgencyCommission">
 			<spring:message text="Agency Commission:"/>
 			</form:label>
-		<form:input type="number" path="packageAgencyCommission" placeholder="Enter the Agency Commission (Required)" class="form-control" />
+		<form:input type="number" step="0.01" min="0.00" max="9999999.99" path="packageAgencyCommission" placeholder="Enter the Agency Commission (Required)" class="form-control" />
 		</div>
 		<p><form:errors path="packageAgencyCommission" cssClass="error"/></p>
 	

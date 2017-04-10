@@ -4,6 +4,7 @@ package com.TravelExperts.Model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date; //THIS MIGHT BE THE PROBLEM 
 import java.util.List;
 
@@ -23,8 +24,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Proxy;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.junit.experimental.theories.Theories;
@@ -59,7 +62,6 @@ public class Package implements Serializable{
 @Id
 @GeneratedValue(strategy=GenerationType.AUTO)
 @Column(name = "packageid")
-
 private Integer packageid;
 
 //NOTE DOES NOT LIKE CAPITALIZED LETTERS AS IT MAKES A _
@@ -81,6 +83,7 @@ private Date packageEndDate;
 
 @NotEmpty(message = "Package must have a description")
 @Column(name = "pkgdesc")
+@Length(max = 45, message="Description cannot be longer than 45 words!")
 private String packageDescription;
 
 @Column(name = "pkgbaseprice")
@@ -96,6 +99,30 @@ private Double packageAgencyCommission;
 
 @Transient
 private List<PackageProductSupplier> packageProductSupplier;
+
+@Transient
+@JsonIgnore
+private String formattedPackageStartDate;
+
+@Transient
+@JsonIgnore
+private String formattedPackageEndDate;
+
+
+
+
+public String getFormattedPackageStartDate() {
+	formattedPackageStartDate = new SimpleDateFormat("dd-MMM-yyyy").format(packageStartDate);
+	return formattedPackageStartDate;
+}
+
+
+
+public String getFormattedPackageEndDate() {
+	formattedPackageEndDate = new SimpleDateFormat("dd-MMM-yyyy").format(packageEndDate);
+	return formattedPackageEndDate;
+}
+
 
 
 public List<PackageProductSupplier> getPackageProductSupplier() {
@@ -161,6 +188,8 @@ public Double getPackageAgencyCommission() {
 public void setPackageAgencyCommission(Double packageAgencyCommission) {
 	this.packageAgencyCommission = packageAgencyCommission;
 }
+
+
 
 //@Override
 //public String toString() {return this.packageDescription.toString();}
