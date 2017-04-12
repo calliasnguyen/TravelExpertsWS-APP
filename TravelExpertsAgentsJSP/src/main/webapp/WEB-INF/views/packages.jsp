@@ -91,7 +91,7 @@ $(document).ready(function(){
 
 <!-- end of the modal -->
 <!--  Specialized nav bar.. this nav bar is for if the package is new -->
-<c:if test="${empty travelPackage.packageName }">
+<c:if test="${empty travelPackage.packageid }">
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -117,7 +117,7 @@ $(document).ready(function(){
 <!-- End of Nav bar for new package -->
 
 <!--  Specialized nav bar.. this nav bar is for if user is editing a package -->
-<c:if test="${!empty travelPackage.packageName }">
+<c:if test="${!empty travelPackage.packageid }">
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -233,10 +233,10 @@ $(document).ready(function(){
 	<!-- end of package table -->
 
 <!-- Begin by Adding a new package -->
-<c:if test="${!empty travelPackage.packageName }">
+<c:if test="${!empty travelPackage.packageid }">
 <h2 style="text-align:center">Modify ${travelPackage.packageName}</h2>
 </c:if>
-<c:if test="${empty travelPackage.packageName }">
+<c:if test="${empty travelPackage.packageid }">
 <h2 style="text-align:center">Add a New Package</h2>
 </c:if>
 
@@ -251,7 +251,7 @@ $(document).ready(function(){
 
 <!--  SHOWS US THE ID OF AN EDITED Package(Shows nothing if there is no value) -->
 <!-- IE Shows nothing if we are adding a new agent -->
-	<c:if test="${!empty travelPackage.packageName }">
+	<c:if test="${!empty travelPackage.packageid }">
 			
 			<div class="form-group">
 			<form:label path="packageid" for="packageid">
@@ -325,11 +325,11 @@ $(document).ready(function(){
 
 	<!-- Button edit or add new Agent -->
 		
-			<c:if test="${!empty travelPackage.packageName}">
+			<c:if test="${!empty travelPackage.packageid}">
 				<input type="submit" id="btnsubmit" class="btn btn-primary active"
 					value="<spring:message text="Edit Package"/>" />
 			</c:if>
-			<c:if test="${empty travelPackage.packageName }">
+			<c:if test="${empty travelPackage.packageid }">
 				<input type="submit" id="btnsubmit" class="btn btn-primary active"
 					value="<spring:message text="Add Package"/>" />
 				</c:if>

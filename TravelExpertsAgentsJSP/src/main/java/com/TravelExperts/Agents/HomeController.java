@@ -445,6 +445,7 @@ else
 		//if there is any errors on this page return back to site with those errors
 		if(result.hasErrors()){
 			model.addAttribute("listAgents", this.agentService.listAgents());
+		
 			return "home";
 		}
 		

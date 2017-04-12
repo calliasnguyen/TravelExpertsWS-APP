@@ -92,6 +92,7 @@ public class Customer implements Serializable {
 	private String customerBusPhone;
 	
 	@Column(name="custemail")
+	@Length(max=45, message="customer email cannot be longer than 45 characters!")
 	@NotEmpty(message="Customer email cannot be empty!")
 	private String customerEmail;
 	

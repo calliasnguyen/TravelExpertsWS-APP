@@ -147,7 +147,7 @@ $(document).ready(function(){
 		<form:label path="customerProvince">
 			<spring:message text="Province Code:"/>
 			</form:label>
-		<form:input path="customerProvince" placeholder="Enter your Province Code (Required) Example: AB, BC" class="form-control" />
+		<form:input title="Province: AB (2 Letters Only)" pattern="[a-zA-Z]{2}" path="customerProvince" placeholder="Enter your Province Code (Required) Example: AB, BC" class="form-control" />
 		</div>
 		<p><form:errors path="customerProvince" cssClass="error"/></p>
 		<!--  Agency postal -->
@@ -156,7 +156,7 @@ $(document).ready(function(){
 			<spring:message text="Postal Code:"/>
 			</form:label>
 
-		<form:input path="customerPostal" placeholder="Enter your Postal Code (Required)" class="form-control"/>
+		<form:input title="Postal Code: N2N 2N2 (ALL CAPS!)" pattern="^[ABCEGHJKLMNPRSTVXY]\d[A-Z] \d[A-Z]\d$" path="customerPostal" placeholder="Enter your Postal Code (Required)" class="form-control"/>
 		</div>
 		<p><form:errors path="customerPostal" cssClass="error"/></p>
 		

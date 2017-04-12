@@ -18,6 +18,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Proxy;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -53,6 +54,7 @@ public class Agent implements Serializable {
 	
 	@Column(name="agtfirstname")
 	@NotEmpty(message="Agent First Name cannot be empty!")
+	@Length(max=19, message="Agent First Name cannot be larger than 19 characters!")
 	private String agtFirstName;
 	
 	@Column(name="agtmiddleinitial")
@@ -61,6 +63,7 @@ public class Agent implements Serializable {
 	private String agtMiddleInitial;
 	
 	@Column(name="agtlastname")
+	@Length(max=19, message="Last name cannot be longer than 20 characters!")
 	@NotEmpty(message="Agent Last Name cannot be empty!")
 	private String agtLastName;
 	
@@ -69,6 +72,7 @@ public class Agent implements Serializable {
 	private String agtBusPhone;
 	
 	@Column(name="agtemail")
+	@Length(max=45, message="Email cannot be longer than 45 characters!")
 	@NotEmpty(message="Agent Email cannot be empty!")
 	private String agtEmail;
 	

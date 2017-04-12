@@ -78,7 +78,7 @@ $(document).ready(function(){
 	
 <!-- Trying to map the home and index pages here -->
 <!-- If the agent is empty.. add a new agent  this will be the nav bar for the site -->
-<c:if test="${empty agent.agtFirstName }">
+<c:if test="${empty agent.agentId }">
 <c:url var="homeURL" value="./home">
 </c:url>
 
@@ -105,7 +105,7 @@ $(document).ready(function(){
 
 <!-- If we are editing agents... then we have to edit the url for the nav  -->
 
-<c:if test="${!empty agent.agtFirstName }">
+<c:if test="${!empty agent.agentId }">
 
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
@@ -130,10 +130,10 @@ $(document).ready(function(){
 
 
 <!-- Begin by Adding a new agent -->
-<c:if test="${!empty agent.agtFirstName }">
+<c:if test="${!empty agent.agentId }">
 <h2 style="text-align:center">Modify ${agent.agtFirstName}  ${agent.agtLastName}</h2>
 </c:if>
-<c:if test="${empty agent.agtFirstName }">
+<c:if test="${empty agent.agentId }">
 <h2 style="text-align:center">Add a New Agent</h2>
 </c:if>
 
@@ -155,7 +155,7 @@ $(document).ready(function(){
 
 <!--  SHOWS US THE ID OF AN EDITED AGENT (Shows nothing if there is no value) -->
 <!-- IE Shows nothing if we are adding a new agent -->
-	<c:if test="${!empty agent.agtFirstName }">
+	<c:if test="${!empty agent.agentId }">
 			
 			<div class="form-group">
 			<form:label path="agentId" for="agentid">
@@ -184,7 +184,7 @@ $(document).ready(function(){
 			<spring:message text="Middle Initial:"/>
 			</form:label>
 
-		<form:input path="agtMiddleInitial" placeholder="Enter your middle initial Max 2 Characters!(Required)" class="form-control" />
+		<form:input title="Initial: A (1-2 Letters Only)" pattern="[a-zA-Z]{2}" path="agtMiddleInitial" placeholder="Enter your middle initial Max 2 Characters!(Required)" class="form-control" />
 		</div>
 		<p><form:errors path="agtMiddleInitial" cssClass="error"/></p>
 	<!-- Agent Last Name -->
@@ -235,11 +235,11 @@ $(document).ready(function(){
 	
 	<!-- Button edit or add new Agent -->
 		
-			<c:if test="${!empty agent.agtFirstName}">
+			<c:if test="${!empty agent.agentId}">
 				<input type="submit" class="btn btn-primary active"
 					value="<spring:message text="Edit Agent"/>" />
 			</c:if>
-			<c:if test="${empty agent.agtFirstName }">
+			<c:if test="${empty agent.agentId }">
 				<input type="submit" class="btn btn-primary active"
 					value="<spring:message text="Add Agent"/>" />
 				</c:if>

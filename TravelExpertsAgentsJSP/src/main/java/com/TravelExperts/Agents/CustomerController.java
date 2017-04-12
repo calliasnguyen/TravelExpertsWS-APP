@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.TravelExperts.Model.Package;
 import com.TravelExperts.Model.Agent;
+import com.TravelExperts.Model.Booking;
 import com.TravelExperts.Model.Customer;
 import com.TravelExperts.Service.AgentService;
+import com.TravelExperts.Service.BookingService;
 import com.TravelExperts.Service.CustomerService;
+import com.TravelExperts.Service.PackageService;
 
 
 
@@ -34,7 +39,13 @@ public class CustomerController {
 	@Autowired
 	AgentService agentService;
 	
-
+	@Autowired 
+	PackageService packageService;
+	
+	@Autowired
+	BookingService bookingService;
+	
+	
 	
 	
 	/////////////////////////////////////GET METHOD to grab all Customers//////////////////////////////////
@@ -123,6 +134,66 @@ public class CustomerController {
 				
 		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
 	}
+	
+	///////////////////////////////////Get request for the booking details phoning by TROPO///////////////
+	@RequestMapping(value = "/booking", method = RequestMethod.GET)
+	public String showRecentBooking(Model model, @RequestParam int bookingId ){
+		
+		Customer customer = null;
+		Package p = null;
+		Booking booking = null;
+		Agent agent =null;
+		
+		booking = bookingService.getBookingById(new Integer(bookingId));
+		
+		//if the booking does not exist return this page
+		if (booking == null)
+		{
+			return "pagenotfound";
+		}
+		
+		Integer customerId = booking.getCustomerid();
+		Integer packageId = booking.getPackageId();
+		
+		try
+		{
+		customer = customerService.getCustomerById(new Integer(customerId));
+		
+		//grab the agent for the booking for that customer
+		Integer agentId = customer.getAgentId();
+			if (agentId == null) 
+			{
+				agentId = 1;
+			}
+		
+		//grab the right agent
+		agent = agentService.getAgentById(agentId);
+		
+		}
+		catch(Exception e) 
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		try{
+		p = packageService.grabProductSuppliers(new Integer(packageId));
+		System.out.println(p.getPackageName());
+		}
+		catch(Exception e) 
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		
+		model.addAttribute("customer", customer);
+		model.addAttribute("p", p);
+		model.addAttribute("agent", agent);
+		
+		
+		return "bookinginformation";
+	}
+	
+	
 	
 	
 	

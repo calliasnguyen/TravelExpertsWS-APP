@@ -33,12 +33,12 @@ import com.TravelExperts.Service.BookingService;
 import com.TravelExperts.Service.CustomerService;
 import com.TravelExperts.Service.PackageService;
 
-import antlr.Token;
+
 
 @RequestMapping(value = "/Booking")
 @Controller
 @Scope("session") // to control sessions
-public class BookingController {
+public class BookingController<T> {
 
 	@Autowired
 	BookingService bookingService;
@@ -131,8 +131,21 @@ public class BookingController {
 		
 		/////////////////////////////////Add a new Booking Post request///////////////////////////////////////////
 		@RequestMapping(value="/add", method=RequestMethod.POST)
-		public ResponseEntity<Booking> addBooking(@RequestBody Booking b) throws Exception //needs to throw any exceptions
+		public ResponseEntity<?> addBooking(@RequestBody Booking b) //throws Exception?
 		{
+		
+			
+			//adding a new booking	FIRST....
+			System.out.println(b);
+			try
+			{
+			//adding a new booking right away
+			bookingService.addBooking(b);
+			
+			
+			//Using tropo after the booking has been added
+			//grabbing customerid and packageid
+			
 			//grab the customerid for the booking
 			Integer customerId = b.getCustomerid();
 		
@@ -151,36 +164,54 @@ public class BookingController {
 				if(agentId !=null)
 				{
 					Agent agent = agentService.getAgentById(agentId);
-					System.out.println(agent.getAgtBusPhone());
+				
 					
 					//String phoneNumber = "+17782418749";
-					String phoneNumber ="1+" + agent.getAgtBusPhone();
-					String msg = "You+have+a+new+booking+from+" + customer.getCustomerFirstName()+"+"+customer.getCustomerLastName();
+					String agentPhoneNumber ="+1" + agent.getAgtBusPhone();
 					
+					String agentMsg = "You+have+a+new+booking+from+" + customer.getCustomerFirstName()+"+"+customer.getCustomerLastName();
+					System.out.println(agentPhoneNumber);
 					
-					//Tropo sending text message
-					textAgentTropo(msg, phoneNumber);
+					//Tropo sending text message TO THE AGENT
+					//textAgentTropo(agentMsg, agentPhoneNumber);
 							
+					//Tropo sending text message to CUSTOMER
+					String customerPhoneNumber = "+1" + customer.getCustomerBusPhone();
 					
-				}
+					//URL Parameters
+				
+					
+					
+					String recieptURL = "http://35.161.216.198:8080/TravelExpertsAgentsJSP/Customer/booking?bookingId="+ b.getBookingId().toString();
+					String customerMsg = "Thank+you+for+purchasing+this+package+" + customer.getCustomerFirstName()+"!+Here+is+a+link+to+your+receipt+"+ recieptURL; 
+					System.out.println(customerMsg);
+					System.out.println(recieptURL);
+					
+					
+					
+					//Tropo sending text message to Customer here
+					textAgentTropo(customerMsg, customerPhoneNumber);
+				}//if agentid is null
 				
 				
 				
 			}//customerId !=null
 			
-			//adding a new booking	
-			System.out.println(b);
-			try
-			{
-			bookingService.addBooking(b);
+			//return a response code at the end 
 			return new ResponseEntity<Booking>(b, HttpStatus.ACCEPTED);
-			}
+			
+			}//end of try
 			catch(Exception e)
 			{
+				String exceptionError = e.getMessage() + e.getCause();
 				System.out.println(e.getMessage() + e.getCause());
-				return new ResponseEntity<Booking>(b, HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<String>(exceptionError, HttpStatus.INTERNAL_SERVER_ERROR);
 				
 			}
+			
+			
+		
+		
 			
 			
 		}//// END OF THE REQUEST
