@@ -184,7 +184,7 @@ $(document).ready(function(){
 			<spring:message text="Middle Initial:"/>
 			</form:label>
 
-		<form:input title="Initial: A (1-2 Letters Only)" pattern="[a-zA-Z]{2}" path="agtMiddleInitial" placeholder="Enter your middle initial Max 2 Characters!(Required)" class="form-control" />
+		<form:input path="agtMiddleInitial" placeholder="Enter your middle initial Max 2 Characters!(Required)" class="form-control" />
 		</div>
 		<p><form:errors path="agtMiddleInitial" cssClass="error"/></p>
 	<!-- Agent Last Name -->

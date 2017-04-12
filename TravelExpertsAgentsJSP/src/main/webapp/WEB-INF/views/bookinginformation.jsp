@@ -35,7 +35,8 @@
 <h4>Hello ${customer.customerFirstName} ${customer.customerLastName},</h4>
 
 <h4> Here is your receipt for the ${p.packageName} package:</h4>
-	
+<h4>Your Booking Number: <strong>${booking.bookingNumber} </strong></h4>
+<h4>Your Booking Id: <strong>${booking.bookingId }</strong></h4>
 <br/>
 	
 	<!-- Table for package Start date and end date -->
@@ -89,7 +90,7 @@
 </div>
 	</c:if>
 
-<h4 style="text-align:center;"><strong>Total Price: $${p.packageBasePrice }</strong></h4>
+<h4 style="text-align:center;"><strong>Total Price: $${p.packageBasePrice }0</strong></h4>
 <!-- End of the list of products -->
 
 

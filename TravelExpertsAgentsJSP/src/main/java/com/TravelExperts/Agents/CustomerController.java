@@ -184,11 +184,11 @@ public class CustomerController {
 			System.out.println(e.getMessage());
 		}
 		
-		
+		//adding all the attributes for the reciept 
 		model.addAttribute("customer", customer);
 		model.addAttribute("p", p);
 		model.addAttribute("agent", agent);
-		
+		model.addAttribute("booking", booking);
 		
 		return "bookinginformation";
 	}
